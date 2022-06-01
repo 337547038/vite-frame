@@ -9,9 +9,9 @@
       :control="item.control"
     />
     <el-form-item v-if="showBtn">
-      <el-button type="primary" @click="onSubmit" v-if="btnText[0]">{{
-        btnText[0]
-      }}</el-button>
+      <el-button type="primary" @click="onSubmit" v-if="btnText[0]"
+        >{{ btnText[0] }}
+      </el-button>
       <el-button v-if="btnText[1]" @click="onReset">{{ btnText[1] }}</el-button>
     </el-form-item>
   </el-form>
@@ -20,18 +20,20 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import Field from './field.vue'
+
   interface formData {
     type: string
     formItem: any
     control: any
   }
+
   const props = withDefaults(
     defineProps<{
       data?: formData
       formData?: any
       beforeSubmit?: Function // 表单提交前
       afterSubmit?: Function // 表单提交后
-      btnText: Object
+      btnText: string[]
       showBtn: boolean
     }>(),
     {
@@ -45,7 +47,7 @@
   const formEl = ref()
   const onSubmit = async () => {
     if (!formEl.value) return
-    await formEl.value.validate((valid, fields) => {
+    await formEl.value.validate((valid: any, fields: any) => {
       if (valid) {
         console.log('submit!')
       } else {

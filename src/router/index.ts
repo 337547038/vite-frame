@@ -1,23 +1,27 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-/*interface RoutesItem {
-  path: string
-  component: any
-  name?: string
-  redirect?: string
-}*/
+// @ts-ignore
+import routesPage from '~pages'
 
+console.log(routesPage)
 const routes: Array<RouteRecordRaw> = [
-  {
+  /*{
     path: '/',
     name: '/home',
     component: () => import('../views/index.vue')
+  }*/
+  {
+    path: '/layout',
+    redirect: '/',
+    name: 'layout',
+    component: () => import('../components/layout/index.vue'),
+    children: routesPage
   }
 ]
-
+// console.log(routes)
 // 配置路由
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes: routes
 })
 
 router.beforeEach((to, from) => {
