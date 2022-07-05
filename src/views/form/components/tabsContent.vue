@@ -81,28 +81,77 @@
           <div class="form-head">
             <delete-outlined class="icon" />
             <span class="label">帘身布双层</span>
-            <a-button size="small"><plus-outlined />帘身布双层(0)</a-button>
-            <div class="unit">长<a-input size="small" /></div>
-            <div class="unit">宽<a-input size="small" /></div>
-            <div class="unit">高<a-input size="small" /></div>
-            <div class="unit">数量<a-input size="small" /></div>
+            <a-button size="small">
+              <plus-outlined />
+              帘身布双层(0)
+            </a-button>
+            <div class="unit"
+              >长
+              <a-input size="small" />
+            </div>
+            <div class="unit"
+              >宽
+              <a-input size="small" />
+            </div>
+            <div class="unit"
+              >高
+              <a-input size="small" />
+            </div>
+            <div class="unit"
+              >数量
+              <a-input size="small" />
+            </div>
+            <div class="control">
+              <arrow-up-outlined />
+              <arrow-down-outlined />
+              <minus-outlined v-if="toggle" @click="toggle = !toggle" />
+              <plus-outlined v-else @click="toggle = !toggle" />
+            </div>
           </div>
-          <div class="form">
-            <a-form-item label="安装附加：">
-              <a-input placeholder="请输入订单编号" />
-            </a-form-item>
-            <a-form-item label="安装方式：">
-              <a-input placeholder="请输入订单编号" />
-            </a-form-item>
-            <a-form-item label="帘身款式：">
-              <a-input placeholder="请输入订单编号" />
-            </a-form-item>
-            <a-form-item label="审工艺备注：">
-              <a-textarea />
-            </a-form-item>
-          </div>
-          <div class="table">
-            <a-table :dataSource="dataSource" :columns="columns" />
+          <div v-show="toggle">
+            <div class="form">
+              <a-form-item label="安装附加：">
+                <a-input placeholder="请输入订单编号" />
+              </a-form-item>
+              <a-form-item label="安装方式：">
+                <a-input placeholder="请输入订单编号" />
+              </a-form-item>
+              <a-form-item label="帘身款式：">
+                <a-input placeholder="请输入订单编号" />
+              </a-form-item>
+              <a-form-item label="审工艺备注：">
+                <a-textarea />
+              </a-form-item>
+            </div>
+            <div class="table">
+              <a-table
+                :dataSource="dataSource"
+                :columns="columns"
+                bordered
+                :scroll="{ x: 2000 }"
+              >
+                <template #bodyCell="{ column, record }">
+                  <template v-if="column.key === 'a1'">
+                    <delete-outlined />
+                  </template>
+                  <template v-if="column.key === 'a2'">
+                    <a-select size="small" style="width: 100%">
+                      <a-select-option value="jack"
+                        >产品结构组成项
+                      </a-select-option>
+                      <a-select-option value="jack">Jack</a-select-option>
+                      <a-select-option value="lucy">Lucy</a-select-option>
+                      <a-select-option value="Yiminghe"
+                        >yiminghe</a-select-option
+                      >
+                    </a-select>
+                  </template>
+                  <template v-if="['a7', 'a13', 'a14'].includes(column.key)">
+                    <a-checkbox />
+                  </template>
+                </template>
+              </a-table>
+            </div>
           </div>
         </div>
       </a-tab-pane>
@@ -117,6 +166,7 @@
 <script setup>
   import { ref } from 'vue'
 
+  const toggle = ref(false)
   const activeKey = ref('1')
   const plainOptions = ref([
     { label: 'Apple', value: 'Apple' },
@@ -127,85 +177,128 @@
     {
       title: '操作',
       dataIndex: 'a1',
-      key: 'a1'
+      key: 'a1',
+      width: 60
     },
     {
       title: '产品结构组成项',
       dataIndex: 'a2',
-      key: 'a2'
+      key: 'a2',
+      width: 160
     },
     {
       title: '物料编号',
       dataIndex: 'a3',
-      key: 'a3'
+      key: 'a3',
+      width: 100
     },
     {
       title: '物料名称',
       dataIndex: 'a4',
-      key: 'a4'
+      key: 'a4',
+      width: 100
     },
     {
       title: '规格型号',
       dataIndex: 'a5',
-      key: 'a5'
+      key: 'a5',
+      width: 100
     },
     {
       title: '实售价',
       dataIndex: 'a6',
-      key: 'a6'
+      key: 'a6',
+      width: 100
     },
     {
       title: '是否余斜',
       dataIndex: 'a7',
-      key: 'a7'
+      key: 'a7',
+      width: 100
     },
     {
       title: '用料',
       dataIndex: 'a8',
-      key: 'a8'
+      key: 'a8',
+      width: 80
     },
     {
       title: '单位',
       dataIndex: 'a9',
-      key: 'a9'
+      key: 'a9',
+      width: 80
     },
     {
       title: '工艺备注',
       dataIndex: 'a10',
-      key: 'a10'
+      key: 'a10',
+      width: 100
     },
     {
       title: '花距',
       dataIndex: 'a11',
-      key: 'a11'
+      key: 'a11',
+      width: 80
     },
     {
       title: '幅数',
       dataIndex: 'a12',
-      key: 'a12'
+      key: 'a12',
+      width: 80
     },
     {
       title: '对花',
       dataIndex: 'a13',
-      key: 'a13'
+      key: 'a13',
+      width: 80
     },
     {
       title: '缩水',
       dataIndex: 'a14',
-      key: 'a14'
+      key: 'a14',
+      width: 80
     },
     {
       title: '审料',
       dataIndex: 'a15',
-      key: 'a15'
+      key: 'a15',
+      width: 80
     },
     {
       title: '审料备注',
       dataIndex: 'a16',
-      key: 'a16'
+      key: 'a16',
+      width: 100
     }
   ])
-  const dataSource = ref([{ a1: '', a2: '', a3: 'Ml20200821004' }])
+  const dataSource = ref([
+    {
+      a1: '',
+      a2: '',
+      a3: 'Ml20200821004',
+      a4: '帘身布单层',
+      a5: '红色',
+      a6: '80.00',
+      a8: '6.2',
+      a9: 'm',
+      a10: '工艺备注',
+      a11: '0.3',
+      a12: '2'
+    },
+    {
+      a1: '',
+      a2: '',
+      a3: 'Ml20200821004',
+      a4: '帘身布单层',
+      a5: '红色',
+      a6: '80.00',
+      a8: '6.2',
+      a9: 'm',
+      a10: '工艺备注',
+      a11: '0.3',
+      a12: '2'
+    }
+  ])
 </script>
 <style lang="scss">
   .form-tabs-content {
@@ -331,6 +424,21 @@
           margin-left: 5px;
         }
       }
+      .control {
+        flex: 2;
+        text-align: right;
+        display: flex;
+        justify-content: flex-end;
+        span {
+          width: 30px;
+          height: 30px;
+          margin-left: 10px;
+          border: 1px solid #ddd;
+          line-height: 30px;
+          cursor: pointer;
+          background: #fff;
+        }
+      }
     }
     .form {
       padding: 0 20px;
@@ -342,6 +450,9 @@
       .ant-form-item-label {
         width: 100px;
       }
+    }
+    .table {
+      padding: 0 20px;
     }
   }
 </style>

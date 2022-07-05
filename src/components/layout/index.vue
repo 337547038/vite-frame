@@ -93,12 +93,26 @@
 <style lang="scss">
   html,
   body,
-  div,p,h1,h2,h3,ul,li {
+  div,
+  p,
+  h1,
+  h2,
+  h3,
+  ul,
+  li {
     margin: 0;
     padding: 0;
   }
+  .ant-input {
+    padding: 2px 10px;
+  }
   .common-layout {
-    .main-scroll{height: 100vh;overflow-y: auto;overflow-x: hidden;box-sizing: border-box;}
+    .main-scroll {
+      height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
     .common-sidebar {
       box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
       color: #fff;
@@ -140,9 +154,13 @@
       .collapsed {
         font-size: 18px;
       }
-      .reload{margin: 0 20px;cursor: pointer}
+      .reload {
+        margin: 0 20px;
+        cursor: pointer;
+      }
     }
-    .common-content {padding: 15px;
+    .common-content {
+      padding: 15px;
     }
     .comm-header-tool {
       flex: 2;

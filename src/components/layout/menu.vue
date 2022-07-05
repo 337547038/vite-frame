@@ -4,13 +4,13 @@
       <template #icon>
         <InboxOutlined />
       </template>
-      <span>Option 2</span>
+      <span>表单</span>
     </a-menu-item>
-    <a-menu-item key="3">
+    <a-menu-item key="/flow">
       <template #icon>
         <InboxOutlined />
       </template>
-      <span>Option 3</span>
+      <span>审批流程</span>
     </a-menu-item>
     <a-sub-menu key="sub1">
       <template #icon>
