@@ -1,0 +1,79 @@
+html, body, div, p, h1, h2, h3, ul, li {
+  margin: 0;
+  padding: 0;
+}
+.ant-input {
+  padding: 2px 10px;
+}
+.common-layout {
+  .main-scroll {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .common-sidebar {
+    box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
+    color: #fff;
+    background-color: #000;
+    height: 100vh;
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 700;
+      height: 60px;
+      justify-content: center;
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    &.ant-layout-sider-collapsed {
+      .logo {
+        span {
+          display: none;
+        }
+      }
+    }
+    .ant-layout-sider-trigger {
+      display: none;
+    }
+  }
+  .common-header {
+    background: #fff;
+    height: 60px;
+    padding: 0 20px;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+    .collapsed {
+      font-size: 18px;
+    }
+    .reload {
+      margin: 0 20px;
+      cursor: pointer;
+    }
+  }
+  .common-content {
+    transition: all .5s;
+    padding: 15px;
+  }
+  .comm-header-tool {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    .header-item {
+      margin-right: 15px;
+    }
+    .full {
+      margin-right: 15px;
+      cursor: pointer;
+    }
+  }
+  .full-screen-exit{position: fixed;right: 10px;top:10px;z-index: 10}
+}

@@ -1,9 +1,10 @@
-<!-- Created by 337547038 on 2022/4/29. -->
 <template>
-  <div>
-123
-  </div>
+  <div> index</div>
 </template>
-<script lang="ts" setup>
 
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import { useStore } from 'vuex'
+  const store = useStore()
+  store.commit('changeBreadcrumb', [])
 </script>

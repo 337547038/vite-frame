@@ -1,6 +1,7 @@
 <template>
   <a-layout class="common-layout">
     <a-layout-sider
+      v-if="!fullscreen"
       class="common-sidebar"
       width="250"
       v-model:collapsed="collapsed"
@@ -12,7 +13,7 @@
       <Menu />
     </a-layout-sider>
     <a-layout class="main-scroll">
-      <a-layout-header class="common-header">
+      <a-layout-header v-if="!fullscreen" class="common-header">
         <menu-fold-outlined
           v-if="collapsed"
           @click="collapsed = !collapsed"
@@ -23,34 +24,43 @@
           @click="collapsed = !collapsed"
           class="collapsed"
         />
-        <reload-outlined class="reload" />
+        <reload-outlined class="reload" @click="reloadClick" />
         <a-breadcrumb>
-          <a-breadcrumb-item>Home</a-breadcrumb-item>
           <a-breadcrumb-item
-            ><a href="">Application Center</a></a-breadcrumb-item
+            ><router-link to="/">首页</router-link></a-breadcrumb-item
           >
-          <a-breadcrumb-item><a href="">Application List</a></a-breadcrumb-item>
-          <a-breadcrumb-item>An Application</a-breadcrumb-item>
+          <a-breadcrumb-item v-for="(item, index) in breadcrumb" :key="index">
+            <router-link :to="item.to" v-if="item.to">{{
+              item.label
+            }}</router-link>
+            <span v-else>{{ item.label }}</span>
+          </a-breadcrumb-item>
         </a-breadcrumb>
         <div class="comm-header-tool">
           <fullscreen-outlined
             class="header-item full"
             @click="handleFullScreen"
           />
-          <a-icon class="header-notice-icon header-item" type="bell" />
           <header-notice class="header-item" />
           <header-avatar class="header-item" />
         </div>
       </a-layout-header>
       <a-layout-content class="common-content">
-        <router-view ref="page" />
+        <router-view ref="page" v-if="reloadFlag" />
       </a-layout-content>
     </a-layout>
+    <fullscreen-exit-outlined
+      class="full-screen-exit"
+      @click="fullscreen = false"
+      v-if="fullscreen"
+    />
   </a-layout>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue'
+  import '../../assets/scss/layout.scss'
+  import { ref, computed, nextTick } from 'vue'
+  import { useStore } from 'vuex'
   import HeaderNotice from './headerNotice.vue'
   import HeaderAvatar from './headerAvatar.vue'
   import Menu from './menu.vue'
@@ -58,7 +68,8 @@
   const collapsed = ref<boolean>(false)
   const fullscreen = ref<boolean>(false)
   const handleFullScreen = () => {
-    let element = document.documentElement
+    fullscreen.value = !fullscreen.value
+    /*let element = document.documentElement
     // 判断是否已经是全屏
     // 如果是全屏，退出
     if (fullscreen.value) {
@@ -87,93 +98,17 @@
       // console.log('已全屏！');
     }
     // 改变当前全屏状态
-    fullscreen.value = !fullscreen.value
+    fullscreen.value = !fullscreen.value*/
+  }
+  const store = useStore()
+  const breadcrumb = computed(() => {
+    return store.state?.layout?.breadcrumb
+  })
+  const reloadFlag = ref<boolean>(true)
+  const reloadClick = () => {
+    reloadFlag.value = false
+    nextTick(() => {
+      reloadFlag.value = true
+    })
   }
 </script>
-<style lang="scss">
-  html,
-  body,
-  div,
-  p,
-  h1,
-  h2,
-  h3,
-  ul,
-  li {
-    margin: 0;
-    padding: 0;
-  }
-  .ant-input {
-    padding: 2px 10px;
-  }
-  .common-layout {
-    .main-scroll {
-      height: 100vh;
-      overflow-y: auto;
-      overflow-x: hidden;
-      box-sizing: border-box;
-    }
-    .common-sidebar {
-      box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
-      color: #fff;
-      background-color: #000;
-      height: 100vh;
-      .logo {
-        display: flex;
-        align-items: center;
-        font-size: 18px;
-        font-weight: 700;
-        height: 60px;
-        justify-content: center;
-        img {
-          width: 30px;
-          height: 30px;
-        }
-      }
-      &.ant-layout-sider-collapsed {
-        .logo {
-          span {
-            display: none;
-          }
-        }
-      }
-      .ant-layout-sider-trigger {
-        display: none;
-      }
-    }
-    .common-header {
-      background: #fff;
-      height: 60px;
-      padding: 0 20px;
-      line-height: normal;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1px;
-      box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
-      .collapsed {
-        font-size: 18px;
-      }
-      .reload {
-        margin: 0 20px;
-        cursor: pointer;
-      }
-    }
-    .common-content {
-      padding: 15px;
-    }
-    .comm-header-tool {
-      flex: 2;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      .header-item {
-        margin-right: 15px;
-      }
-      .full {
-        margin-right: 0;
-        cursor: pointer;
-      }
-    }
-  }
-</style>

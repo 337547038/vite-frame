@@ -1,6 +1,7 @@
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
 import app from './modules/app'
+import layout from './modules/layout'
 
 export interface State {
   count: number
@@ -10,7 +11,8 @@ export const key: InjectionKey<Store<State>> = Symbol()
 
 export const store = createStore<State>({
   modules: {
-    app
+    app,
+    layout
   }
   /*  state() {
     return {
@@ -23,3 +25,6 @@ export const store = createStore<State>({
     }
   }*/
 })
+/*export function useStore() {
+  return baseUseStore(key)
+}*/
