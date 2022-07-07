@@ -1,65 +1,25 @@
 <template>
   <el-container class="common-layout">
-    <el-aside width="200px" class="container-sidebar">
-      <el-menu
-        :collapse="isCollapse"
-        active-text-color="#ffd04b"
-        background-color="rgb(48 65 86)"
-        class="el-menu-vertical-demo"
-        default-active="2"
-        text-color="#fff"
-        @open="handleOpen"
-        @close="handleClose"
+    <el-aside :width="isCollapse ? '64px' : '220px'" class="common-sidebar">
+      <div class="logo"
+        ><img src="../../assets/logo.png" />
+        <span v-show="!isCollapse">XX管理系统</span></div
       >
-        <el-sub-menu index="1">
-          <template #title>
-            <el-icon>
-              <location />
-            </el-icon>
-            <span>Navigator One</span>
-          </template>
-          <el-menu-item-group title="Group One">
-            <el-menu-item index="1-1">item one</el-menu-item>
-            <el-menu-item index="1-2">item one</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="Group Two">
-            <el-menu-item index="1-3">item three</el-menu-item>
-          </el-menu-item-group>
-          <el-sub-menu index="1-4">
-            <template #title>item four</template>
-            <el-menu-item index="1-4-1">item one</el-menu-item>
-          </el-sub-menu>
-        </el-sub-menu>
-        <el-menu-item index="2">
-          <el-icon>
-            <icon-menu />
-          </el-icon>
-          <span>Navigator Two</span>
-        </el-menu-item>
-        <el-menu-item index="3" disabled>
-          <el-icon>
-            <document />
-          </el-icon>
-          <span>Navigator Three</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <el-icon>
-            <setting />
-          </el-icon>
-          <span>Navigator Four</span>
-        </el-menu-item>
-      </el-menu>
+      <Menu :collapse="isCollapse" />
     </el-aside>
-    <TagViews v-model="include" />
-    <el-main key="main">
-
-      <div style="height: 20px"></div>
-      <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
-      </router-view>
-    </el-main>
+    <el-container>
+      <el-header class="common-header">
+        <CommonHeader @click="headClick" />
+        <TagViews v-model="include" />
+      </el-header>
+      <el-main class="common-main">
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
+      </el-main>
+    </el-container>
   </el-container>
 </template>
 
@@ -72,13 +32,16 @@
     Location,
     Setting
   } from '@element-plus/icons-vue'
+  import Menu from './menu.vue'
+  import CommonHeader from './header.vue'
+
   const isCollapse = ref(false)
-  const include = ref<string[]>([])
-  const handleOpen = (key: string, keyPath: string[]) => {
-    console.log(key, keyPath)
+  const headClick = (type: string) => {
+    if (type === 'collapse') {
+      isCollapse.value = !isCollapse.value
+    }
   }
-  const handleClose = (key: string, keyPath: string[]) => {
-    console.log(key, keyPath)
+    const include = ref<string[]>([])
   }
 </script>
 <style lang="scss">
@@ -88,16 +51,74 @@
     margin: 0;
     padding: 0;
   }
-
+  @mixin scrollColor($color) {
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      position: relative;
+      z-index: 100;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $color;
+      background-clip: padding-box;
+      min-height: 28px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+    }
+    &::-webkit-scrollbar-corner {
+      background: $color;
+    }
+    /*&::-webkit-scrollbar:$colorGray2; //滚动条整体部分
+    ::-webkit-scrollbar-button:''; //滚动条两端的按钮
+    ::-webkit-scrollbar-track:'';  //外层轨道
+    ::-webkit-scrollbar-track-piece:'';  //内层滚动槽
+    ::-webkit-scrollbar-thumb:$colorGray3; //滚动的滑块
+    ::-webkit-scrollbar-corner:''; //边角
+    ::-webkit-resizer //定义右下角拖动块的样式*/
+  }
   .common-layout {
-    .container-sidebar {
+    .common-sidebar {
+      transition: all 0.3s;
+      box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
       color: #fff;
-      background-color: rgb(48, 65, 86);
+      background-color: rgb(48 65 86);
       height: 100vh;
+      overflow-x: hidden;
+      @include scrollColor(#6c5155);
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 700;
+        height: 60px;
+        justify-content: center;
+        img {
+          width: 30px;
+          height: 30px;
+        }
+      }
+      .el-menu {
+        border-right: 0;
+      }
+    }
+    .common-header {
+      box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .collapse-icon {
+        cursor: pointer;
+        font-size: 18px;
+      }
+    }
+    .common-main {
+      background: #f0f2f5;
+      @include scrollColor(#cecfd0);
     }
   }
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
+  /*.el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
     min-height: 400px;
-  }
+  }*/
 </style>

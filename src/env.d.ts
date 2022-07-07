@@ -6,6 +6,11 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+declare module 'virtual:generated-pages' {
+  const routesList: any[]
+  export default routesList
+}
 /*
 declare module 'vuex' {
   type StoreStateType = typeof store.state
