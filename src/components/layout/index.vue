@@ -50,14 +50,22 @@
         </el-menu-item>
       </el-menu>
     </el-aside>
-    <el-main>
-      <router-view />
+    <TagViews v-model="include" />
+    <el-main key="main">
+
+      <div style="height: 20px"></div>
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </el-main>
   </el-container>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
+  import TagViews from './tagViews/index.vue'
   import {
     Document,
     Menu as IconMenu,
@@ -65,6 +73,7 @@
     Setting
   } from '@element-plus/icons-vue'
   const isCollapse = ref(false)
+  const include = ref<string[]>([])
   const handleOpen = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
   }
