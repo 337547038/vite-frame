@@ -3,75 +3,121 @@
     :collapse="collapse"
     active-text-color="#ffd04b"
     background-color="rgb(48 65 86)"
-    class="el-menu-vertical-demo"
-    default-active="2"
     text-color="#fff"
+    @select="select"
   >
-    <el-menu-item index="/">
-      <el-icon>
-        <icon-menu />
-      </el-icon>
-      <span>表单</span>
-    </el-menu-item>
-    <el-menu-item index="/table">
-      <el-icon>
-        <icon-menu />
-      </el-icon>
-      <span>列表</span>
-    </el-menu-item>
-    <el-sub-menu index="1">
-      <template #title>
-        <el-icon>
-          <location />
-        </el-icon>
-        <span>Navigator One</span>
-      </template>
-      <el-menu-item-group title="Group One">
-        <el-menu-item index="1-1">item one</el-menu-item>
-        <el-menu-item index="1-2">item one</el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group title="Group Two">
-        <el-menu-item index="1-3">item three</el-menu-item>
-      </el-menu-item-group>
-      <el-sub-menu index="1-4">
-        <template #title>item four</template>
-        <el-menu-item index="1-4-1">item one</el-menu-item>
-      </el-sub-menu>
-    </el-sub-menu>
-    <el-menu-item index="2">
-      <el-icon>
-        <icon-menu />
-      </el-icon>
-      <span>Navigator Two</span>
-    </el-menu-item>
-    <el-menu-item index="3" disabled>
-      <el-icon>
-        <document />
-      </el-icon>
-      <span>Navigator Three</span>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <el-icon>
-        <setting />
-      </el-icon>
-      <span>Navigator Four</span>
-    </el-menu-item>
+    <MenuItem :data="navList" />
   </el-menu>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import {
-    Document,
-    Menu as IconMenu,
-    Location,
-    Setting
-  } from '@element-plus/icons-vue'
+  import MenuItem from './menuItem.vue'
+  import { ref, onMounted, watch } from 'vue'
+  import { useStore } from 'vuex'
+  import { useRouter, useRoute } from 'vue-router'
+  const router = useRouter()
+  const route = useRoute()
+  const store = useStore()
+  // store.commit('changeBreadcrumb', [{ label: '表单页面' }])
 
-  const props = withDefaults(
+  withDefaults(
     defineProps<{
       collapse: boolean
     }>(),
     {}
   )
+  const emits = defineEmits<{
+    (e: 'getMenuList', val: any): void
+  }>()
+  const navList = ref([
+    {
+      title: '首页',
+      path: '/',
+      icon: 'HomeFilled'
+    },
+    {
+      title: '表单页面',
+      path: '/form',
+      icon: 'location'
+    },
+    {
+      title: '表单页面2',
+      path: '/form2',
+      icon: 'location'
+    },
+    {
+      title: '列表页面',
+      path: '/list',
+      icon: 'collection'
+    },
+    {
+      title: '测试',
+      path: '/test',
+      icon: 'collection'
+    },
+    {
+      title: '用户管理',
+      icon: 'user',
+      children: [
+        {
+          title: '新增用户',
+          path: '/addUser'
+        },
+        {
+          title: '用户列表',
+          children: [
+            {
+              title: '普通用户'
+            },
+            {
+              title: '合作用户'
+            },
+            {
+              title: '合作用户2'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      title: '系统管理',
+      icon: 'setting',
+      children: [
+        {
+          title: '用户管理'
+        },
+        {
+          title: '角色管理'
+        },
+        {
+          title: '菜单管理'
+        },
+        {
+          title: '登录日志'
+        },
+        {
+          title: '操作管理'
+        }
+      ]
+    }
+  ])
+  const select = (index: string) => {
+    router.push({ path: index })
+  }
+  console.log(route)
+  watch(
+    () => route.path,
+    () => {
+      // 根据path从navList里取title，多级时可在当前页面中修改changeBreadcrumb
+      navList.value.forEach((item) => {
+        if (item.path === route.path) {
+          store.commit('changeBreadcrumb', [{ label: item.title }])
+        }
+      })
+    }
+  )
+  onMounted(() => {
+    // 将导航信息传给tagViews，根据path匹配出显示的title
+    emits('getMenuList', navList.value)
+  })
 </script>

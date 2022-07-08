@@ -7,11 +7,15 @@ interface TabsViews {
   path: string
   name: string // 路由名称name
 }
-const getSession = window.sessionStorage.getItem('tagViews') || []
+const getSession = window.sessionStorage.getItem('tagViews')
+let tabs = []
+if (getSession) {
+  tabs = JSON.parse(getSession)
+}
 const layout: any = {
   state: {
     breadcrumb: [],
-    tabs: getSession
+    tabs: tabs
   },
   mutations: {
     // 这里填充数据的操作方法

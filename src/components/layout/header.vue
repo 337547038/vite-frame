@@ -1,22 +1,109 @@
 <template>
-  <el-icon @click="collapseClick" class="collapse-icon"><Fold /></el-icon>
-  <el-icon><RefreshRight /></el-icon>
-  <el-breadcrumb separator="/">
-    <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-    <el-breadcrumb-item><a href="/">promotion management</a></el-breadcrumb-item>
-    <el-breadcrumb-item>promotion list</el-breadcrumb-item>
-    <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
+  <el-icon @click="toolClick('collapse')" class="collapse-icon">
+    <Fold v-if="!collapse" />
+    <Expand v-else />
+  </el-icon>
+  <el-breadcrumb separator="/" class="breadcrumb">
+    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+    <el-breadcrumb-item
+      v-for="(item, index) in breadcrumb"
+      :key="index"
+      :to="{ path: item.path }"
+      >{{ item.label }}</el-breadcrumb-item
+    >
   </el-breadcrumb>
-  <div>Header</div>
+  <div class="comm-header-tool">
+    <el-icon @click="toolClick('refresh')" title="刷新页面"
+      ><RefreshRight
+    /></el-icon>
+    <el-icon title="全屏"
+      ><FullScreen @click="toolClick('fullScreen')"
+    /></el-icon>
+  </div>
+  <div class="header-right">
+    <el-dropdown>
+      <div class="header-avatar" style="cursor: pointer">
+        <el-avatar
+          class="avatar"
+          size="small"
+          shape="circle"
+          :src="user.avatar"
+        />
+        <span class="name">{{ user.name }}</span>
+        <el-icon class="el-icon--right">
+          <arrow-down />
+        </el-icon>
+      </div>
+      <template #dropdown>
+        <el-menu class="avatar-menu">
+          <el-menu-item>
+            <el-icon><User /></el-icon>
+            <span class="title">个人中心</span>
+          </el-menu-item>
+          <el-menu-item>
+            <el-icon><Setting /></el-icon>
+            <span class="title">设置</span>
+          </el-menu-item>
+          <el-menu-item @click="logout">
+            <el-icon><CircleClose /></el-icon>
+            <span class="title">退出登录</span>
+          </el-menu-item>
+        </el-menu>
+      </template>
+    </el-dropdown>
+  </div>
 </template>
 
 <script setup lang="ts">
-  import { Fold, RefreshRight } from '@element-plus/icons-vue'
-  withDefaults(defineProps<{}>(), {})
+  import { computed, ref } from 'vue'
+  import { useStore } from 'vuex'
+  withDefaults(
+    defineProps<{
+      collapse: boolean
+    }>(),
+    {}
+  )
+  const store = useStore()
+  const breadcrumb = computed(() => {
+    return store.state?.layout?.breadcrumb
+  })
   const emits = defineEmits<{
     (e: 'click', type: string): void
   }>()
-  const collapseClick = () => {
-    emits('click', 'collapse')
+  const user = ref({
+    name: 'userName',
+    avatar: 'https://xxx/avatar.jpg'
+  })
+  const toolClick = (type: string) => {
+    emits('click', type)
+  }
+  const logout = () => {
+    console.log('logout')
   }
 </script>
+<style lang="scss">
+  .header-avatar {
+    display: flex;
+    align-items: center;
+    .avatar,
+    .name {
+      align-self: center;
+    }
+    .avatar {
+      margin-right: 8px;
+    }
+    .name {
+      font-weight: 500;
+    }
+  }
+  .avatar-menu {
+    width: 150px;
+    .title {
+      margin-left: 10px;
+    }
+    li {
+      height: 35px;
+      line-height: 35px;
+    }
+  }
+</style>

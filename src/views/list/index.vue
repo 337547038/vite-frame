@@ -8,6 +8,16 @@
     </table-list>
   </div>
 </template>
+<route>
+{
+ name:'List01'
+}
+</route>
+<script lang="tsx">
+  export default {
+    name: 'List01'
+  }
+</script>
 <script lang="tsx" setup>
   import { ref } from 'vue'
   import tableList from '@/components/table/index.vue'

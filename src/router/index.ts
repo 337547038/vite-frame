@@ -30,8 +30,8 @@ router.beforeEach((to, from) => {
   if (toPath === fromPath) {
     return false
   }*/
-  console.log(to)
-  console.log(from)
+  //console.log(to)
+  //console.log(from)
 })
 
 export default router

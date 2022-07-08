@@ -33,8 +33,8 @@
       formData?: any
       beforeSubmit?: Function // 表单提交前
       afterSubmit?: Function // 表单提交后
-      btnText: string[]
-      showBtn: boolean
+      btnText?: string[]
+      showBtn?: boolean
     }>(),
     {
       btnText: () => ['确定', '取消'],
