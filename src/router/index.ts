@@ -1,4 +1,9 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  RouteRecordRaw,
+  createWebHashHistory
+} from 'vue-router'
 // @ts-ignore
 import routesPage from '~pages'
 
@@ -20,7 +25,8 @@ const routes: Array<RouteRecordRaw> = [
 // console.log(routes)
 // 配置路由
 const router = createRouter({
-  history: createWebHistory(),
+  //history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: routes
 })
 
