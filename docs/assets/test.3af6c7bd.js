@@ -1,1 +1,0 @@
-import{_ as e,f as t,g as o}from"./index.059eed3f.js";const r={name:"test",data(){return{}},props:{},components:{},methods:{},computed:{},mounted(){}};function s(n,a,c,p,d,m){return t(),o("div")}var f=e(r,[["render",s]]);export{f as default};

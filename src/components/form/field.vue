@@ -41,8 +41,8 @@
     <!--    <el-upload v-else-if="type === 'select'">根据具体项目做一个或多个不机样式</el-upload>-->
     <component
       :is="currentComponent"
-      v-model="fieldValue"
       v-bind="control"
+      v-model="fieldValue"
       v-else
     />
   </el-form-item>
@@ -52,8 +52,8 @@
   import { ref, computed, watch } from 'vue'
   const props = withDefaults(
     defineProps<{
-      formItem?: Object // 表格formItem相关参数
-      control?: Object // formItem内组件相关参数
+      formItem?: object // 表格formItem相关参数
+      control?: object // formItem内组件相关参数
       type?:
         | 'input'
         | 'cascader'
@@ -67,6 +67,7 @@
         | 'upload'
         | 'slider'
       modelValue?: any
+      setValue?: any
     }>(),
     {
       type: 'input'
@@ -86,6 +87,12 @@
     () => fieldValue.value,
     (val: any) => {
       emits('update:modelValue', val)
+    }
+  )
+  watch(
+    () => props.setValue,
+    () => {
+      fieldValue.value = props.setValue
     }
   )
   const currentComponent = computed(() => {

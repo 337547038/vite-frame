@@ -1,0 +1,1 @@
+import{_ as e,c as t,e as o}from"./index.919a766f.js";const r={name:"test",data(){return{}},props:{},components:{},methods:{},computed:{},mounted(){}};function s(n,a,c,p,d,m){return t(),o("div")}var u=e(r,[["render",s]]);export{u as default};

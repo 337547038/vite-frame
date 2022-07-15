@@ -1,12 +1,9 @@
 <template>
   <div class="table-comm">
-    <div class="search-box">
-      <!--      筛选组件待封装-->
-      <el-form :inline="true">
-        <slot name="_searchForm"></slot>
-      </el-form>
+    <div class="search-box" v-if="searchData?.length > 0">
+      <SearchForm :data="searchData" @submit="submit" />
     </div>
-    <el-table :stripe="true" :data="state.tableData" v-bind="tableProps">
+    <el-table :stripe="true" :data="tableData" v-bind="tableProps">
       <template v-for="(item, index) in columns" :key="index">
         <el-table-column v-bind="item">
           <template #header="scope" v-if="item.help">
@@ -38,13 +35,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, onMounted } from 'vue'
+  import { reactive, onMounted, ref } from 'vue'
+  import SearchForm from '@/components/form/index.vue'
   import { getRequest } from '../../api'
+
   const props = withDefaults(
     defineProps<{
       tableProps?: Object // 表格相关参数
       columns?: Object
-      search?: Object
+      searchData?: Object
       api?: string
       tableList?: any // 当api为空时，表格数据将使用参数传进来的
       beforeRequest?: Function // 请求列表数据之前
@@ -54,44 +53,57 @@
       tableList: () => []
     }
   )
-  /*const emit = defineEmits<{
-    (e: 'change', id: number): void
-    (e: 'update', value: string): void
-  }>()*/
-
+  const emits = defineEmits<{
+    (e: 'submit', obj: any): void
+    (e: 'sizeChange', page: number): void
+    (e: 'currentChange', page: number): void
+  }>()
+  const tableData = ref([])
   const state = reactive<any>({
-    tableData: [],
     currentPage: 1,
     total: 10,
     pageSize: 10
   })
-  // 当搜索使用slot时，查询可直接使用getData方法，传参进来即可
   const getData = (obj?: any) => {
-    const prams = {}
-    if (obj) {
-      Object.assign(prams, obj)
-    }
+    const prams = {} // 一些初始参数
+    let beforePrams = {}
     // 请求前将参数合并
-    if (typeof props.beforeRequest === 'function') {
-      Object.assign(prams, props.beforeRequest())
+    if (props.beforeRequest && typeof props.beforeRequest === 'function') {
+      beforePrams = props.beforeRequest() || {}
     }
     // 获取数据
     if (props.api) {
-      getRequest(props.api, prams)
+      getRequest(props.api, Object.assign(prams, obj || {}, beforePrams))
         .then((res: any) => {
           if (typeof props.afterResponse === 'function') {
-            state.tableData = props.afterResponse(res)
+            tableData.value = props.afterResponse(res)
           } else {
-            state.tableData = res.list
+            tableData.value = res.list
           }
         })
-        .catch(() => {})
+        .catch(() => {
+          // 全局异常处理
+        })
     } else {
-      state.tableData = props.tableList
+      tableData.value = props.tableList
     }
   }
-  const handleSizeChange = () => {}
-  const handleCurrentChange = () => {}
+  const handleSizeChange = (page: number) => {
+    state.currentPage = page
+    emits('sizeChange', page)
+    getData()
+  }
+  const handleCurrentChange = (page: number) => {
+    state.pageSize = page
+    emits('currentChange', page)
+    getData()
+  }
+  // 搜索表单事件
+  const submit = (obj: any) => {
+    console.log(obj)
+    emits('submit', obj) // 没传api在外部加载数据时，回调事件
+    getData(obj)
+  }
   onMounted(() => {
     getData()
   })

@@ -3,7 +3,8 @@ import request from '../utils/request'
 //const isDev = import.meta.env.DEV
 
 const api: any = {
-  tableList: '/get/table/list'
+  tableList: '/get/table/list',
+  formSubmit: '/formSubmit'
 }
 export const getRequest = (apiKey: string, data?: any, options = {}) => {
   const obj: any = Object.assign(

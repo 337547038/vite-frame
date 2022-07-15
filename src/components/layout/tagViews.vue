@@ -19,7 +19,11 @@
         </template>
       </el-tab-pane>
     </el-tabs>
-    <el-icon @click="clearTag" class="clear-tag" title="清空全部"
+    <el-icon
+      @click="clearTag"
+      class="clear-tag"
+      title="清空全部"
+      v-if="tabsViews?.length > 0"
       ><Close
     /></el-icon>
   </div>
@@ -55,7 +59,7 @@
   const router = useRouter()
   const activeName = ref()
   const tabsViews = computed(() => {
-    return store.state?.layout?.tabs
+    return store.state?.layout?.tabs || []
   })
   const handleClick = (path: string) => {
     activeName.value = path

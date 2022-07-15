@@ -9,18 +9,18 @@ import routesPage from '~pages'
 
 console.log(routesPage)
 const routes: Array<RouteRecordRaw> = [
-  /*{
+  {
     path: '/',
     name: '/home',
-    component: () => import('../views/index.vue')
-  }*/
-  {
+    component: () => import('../views/list/index.vue')
+  }
+  /*{
     path: '/layout',
     redirect: '/',
     name: 'layout',
     component: () => import('../components/layout/index.vue'),
     children: routesPage
-  }
+  }*/
 ]
 // console.log(routes)
 // 配置路由
