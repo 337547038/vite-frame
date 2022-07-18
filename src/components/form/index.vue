@@ -31,7 +31,7 @@
 <script setup lang="ts">
   import { ref, computed, onMounted } from 'vue'
   import Field from './field.vue'
-  import { getRequest } from '../../api'
+  import { getRequest } from '@/api'
 
   interface formData {
     type: string
@@ -39,7 +39,6 @@
     control: any
     isHide?: boolean
   }
-
   const props = withDefaults(
     defineProps<{
       data?: formData[] // 表单项数据

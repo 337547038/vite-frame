@@ -21,7 +21,7 @@ name:'Form'
   }
 </script>
 <script lang="ts" setup>
-  import { ref } from 'vue'
+  import { ref, markRaw } from 'vue'
   import FormAuto from '@/components/form/index.vue'
   import TestCom from './test.vue'
 
@@ -89,7 +89,7 @@ name:'Form'
     },
     {
       type: 'component',
-      component: TestCom,
+      component: markRaw(TestCom),
       control: {
         placeholder: '自定义组件'
       }

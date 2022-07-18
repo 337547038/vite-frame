@@ -6,7 +6,7 @@
       v-if="!fullScreen"
     >
       <div class="logo"
-        ><img src="../../assets/logo.png" />
+        ><img src="@/assets/logo.png" />
         <span v-show="!isCollapse">XX管理系统</span></div
       >
       <Menu :collapse="isCollapse" @get-menu-list="getMenuList" />
@@ -35,13 +35,13 @@
 </template>
 
 <script lang="ts" setup>
-  import '../../assets/scss/layout.scss'
+  import '@/assets/scss/layout.scss'
   import { ref, computed, nextTick } from 'vue'
-  import { useStore } from 'vuex'
+  import { useLayoutStore } from '@/store/layout'
   import TagViews from './tagViews.vue'
   import Menu from './menu.vue'
   import CommonHeader from './header.vue'
-  const store = useStore()
+  const store = useLayoutStore()
   const isCollapse = ref<boolean>(false)
   const fullScreen = ref<boolean>(false)
   const reloadFlag = ref<boolean>(true)
@@ -64,7 +64,7 @@
     navList.value = obj
   }
   const keepAliveInclude = computed(() => {
-    const tag = store.state?.layout?.tabs
+    const tag = store?.tabs
     if (tag) {
       const temp: string[] = []
       tag.forEach((item: any) => {

@@ -37,7 +37,7 @@
 <script lang="ts" setup>
   import { reactive, onMounted, ref } from 'vue'
   import SearchForm from '@/components/form/index.vue'
-  import { getRequest } from '../../api'
+  import { getRequest } from '@/api'
 
   const props = withDefaults(
     defineProps<{

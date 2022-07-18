@@ -13,11 +13,12 @@
 <script setup lang="ts">
   import MenuItem from './menuItem.vue'
   import { ref, onMounted, watch } from 'vue'
-  import { useStore } from 'vuex'
   import { useRouter, useRoute } from 'vue-router'
+  import { useLayoutStore } from '@/store/layout'
+
   const router = useRouter()
   const route = useRoute()
-  const store = useStore()
+  const store = useLayoutStore()
   // store.commit('changeBreadcrumb', [{ label: '表单页面' }])
 
   withDefaults(
@@ -111,7 +112,7 @@
       // 根据path从navList里取title，多级时可在当前页面中修改changeBreadcrumb
       navList.value.forEach((item) => {
         if (item.path === route.path) {
-          store.commit('changeBreadcrumb', [{ label: item.title }])
+          store.changeBreadcrumb([{ label: item.title }])
         }
       })
     }

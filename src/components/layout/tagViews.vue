@@ -37,10 +37,10 @@
   }
 
   import { ref, computed, onMounted, watch } from 'vue'
-  import { useStore } from 'vuex'
+  import { useLayoutStore } from '@/store/layout'
   import { useRoute, useRouter } from 'vue-router'
 
-  const store = useStore()
+  const store = useLayoutStore()
   const props = withDefaults(
     defineProps<{
       navList: string[]
@@ -59,7 +59,7 @@
   const router = useRouter()
   const activeName = ref()
   const tabsViews = computed(() => {
-    return store.state?.layout?.tabs || []
+    return store?.tabs || []
   })
   const handleClick = (path: string) => {
     activeName.value = path
@@ -79,7 +79,7 @@
     } else if (index === 0) {
       router.push({ path: '/' })
     }
-    store.commit('setTabsViews', newTabs)
+    store.setTabsViews(newTabs)
     evt.stopPropagation()
   }
 
@@ -108,19 +108,19 @@
         path: route.path,
         name: route.name // 这个是组件的名称，目前组件和路由name保持一致
       })
-      store.commit('setTabsViews', oldTab)
+      store.setTabsViews(oldTab)
     }
     activeName.value = route.path
   }
 
   const clearTag = () => {
     router.push({ path: '/' })
-    store.commit('setTabsViews', [])
+    store.setTabsViews([])
   }
   watch(
     () => route.path,
     () => {
-      console.log(route)
+      //console.log(route)
       setTabViews()
     }
   )

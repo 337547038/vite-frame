@@ -56,16 +56,17 @@
 
 <script setup lang="ts">
   import { computed, ref } from 'vue'
-  import { useStore } from 'vuex'
+  import { useLayoutStore } from '@/store/layout'
+  //import { useStore } from 'vuex'
   withDefaults(
     defineProps<{
       collapse: boolean
     }>(),
     {}
   )
-  const store = useStore()
+  const store = useLayoutStore()
   const breadcrumb = computed(() => {
-    return store.state?.layout?.breadcrumb
+    return store?.breadcrumb
   })
   const emits = defineEmits<{
     (e: 'click', type: string): void
