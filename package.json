@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sprites": "node sprites/sprites.js"
   },
   "dependencies": {
     "axios": "^0.26.1",
