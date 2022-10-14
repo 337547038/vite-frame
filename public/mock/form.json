@@ -1,0 +1,18 @@
+{
+  "code": 200,
+  "dict": {
+    "radio": {
+      "0": "女"
+    },
+    "checkbox": {
+      "0": "启用",
+      "1": "禁用"
+    }
+  },
+  "data": {
+    "text": "a",
+    "password": "abc",
+    "select": "0",
+    "textC": "自定义"
+  }
+}

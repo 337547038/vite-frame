@@ -62,19 +62,22 @@
       children: [
         {
           title: '新增用户',
-          path: '/addUser'
+          path: '/test'
         },
         {
           title: '用户列表',
           children: [
             {
-              title: '普通用户'
+              title: '普通用户',
+              path: '/test'
             },
             {
-              title: '合作用户'
+              title: '合作用户',
+              path: '/test'
             },
             {
-              title: '合作用户2'
+              title: '合作用户2',
+              path: '/test'
             }
           ]
         }
@@ -85,19 +88,24 @@
       icon: 'setting',
       children: [
         {
-          title: '用户管理'
+          title: '用户管理',
+          path: '/test'
         },
         {
-          title: '角色管理'
+          title: '角色管理',
+          path: '/test'
         },
         {
-          title: '菜单管理'
+          title: '菜单管理',
+          path: '/test'
         },
         {
-          title: '登录日志'
+          title: '登录日志',
+          path: '/test'
         },
         {
-          title: '操作管理'
+          title: '操作管理',
+          path: '/test'
         }
       ]
     }

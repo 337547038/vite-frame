@@ -1,1 +1,0 @@
-import{a,e,f as c,g as r,h as l,i as p}from"./index.2cc539a9.js";const _=a({props:{placeholder:null},setup(o){return(u,s)=>{const t=e("el-input"),n=e("el-form-item");return c(),r("div",null,[l(n,{label:"\u81EA\u5B9A\u4E49\u7EC4\u4EF6"},{default:p(()=>[l(t,{placeholder:o.placeholder},null,8,["placeholder"])]),_:1})])}}});export{_ as default};

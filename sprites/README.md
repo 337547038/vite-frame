@@ -1,7 +1,7 @@
 # 合并雪碧图
 通用运行node sprites.js可将多张小图合并，并生成对应的样式。
 
-使用前需要先配置好：
+使用前需要先在sprites.js里配置好：
 ```javascript
 const SPRITESPATH = './src/assets/sprites' // 图片路径
 const SAVEPATH = './src/assets/img' // 合并后图片保存位置

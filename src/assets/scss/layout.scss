@@ -31,6 +31,9 @@ div {
   ::-webkit-resizer //定义右下角拖动块的样式*/
 }
 .common-layout {
+  .common-container{
+    height: 100vh;
+  }
   .common-sidebar {
     transition: all 0.3s;
     box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
