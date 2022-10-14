@@ -44,7 +44,7 @@ el-table二次封装，实现功能：
 <ak-form :data="data"></ak-form>
 ```
 
-[更多参数详见](blob/main/src/components/form/README.md)
+[更多参数点这里](blob/main/src/components/form/README.md)
 
 ## 说明
 
