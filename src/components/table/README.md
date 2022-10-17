@@ -26,17 +26,18 @@
 
 ## API
  ### Props
-| 参数                | 类型             | 说明                       |
-|-------------------|----------------|--------------------------|
-| tableProps        | object         | 对应table组件的props参数        |
-| columns           | array          | 表格列数据                    |
-| searchData        | array          | 条件筛选表单数据                 |
-| apiKey            | string         | 请求接口api                  |
-| beforeRequest     | function       | 请求列表数据之前方法，可对请求参数进行处理    |
-| afterResponse     | function       | 请求到列表数据处理后返回表格列表所需数据     |
-| showPage          | boolean/true   | 是否显示分页信息                 |
-| dict              | object         | 用于匹配的字典数据，一般不设置，从接口获取并合并 |
-| fixedBottomScroll | boolean/string | 固定横向滚动条在底部,可为节点类名        |
+| 参数                | 类型             | 说明                                 |
+|-------------------|----------------|------------------------------------|
+| tableProps        | object         | 对应table组件的props参数                  |
+| columns           | array          | 表格列数据                              |
+| searchData        | array          | 条件筛选表单数据                           |
+| formConfig        | object         | 筛选表单设置，见`ak-form`                  |
+| apiKey            | string         | 请求接口api                            |
+| beforeRequest     | function       | 请求列表数据之前方法，可对请求参数进行处理，返回false时取消请求 |
+| afterResponse     | function       | 请求到列表数据处理后返回表格列表所需数据               |
+| showPage          | boolean/true   | 是否显示分页信息                           |
+| dict              | object         | 用于匹配的字典数据，一般不设置，从接口获取并合并           |
+| fixedBottomScroll | boolean/string | 固定横向滚动条在底部,可为节点类名                  |
 
 ### columns 扩展
 | 参数         | 类型            | 说明                                                  |
@@ -52,14 +53,101 @@
 |---------|--------------|
 | getData | 列表请求方法，可手动调用 |
 
-### Event
-| 参数            | 说明                    |
-|---------------|-----------------------|
 
 ### Slot
-| 参数         | 说明                               |
-|------------|----------------------------------|
-| default    | 位于筛选表单和表格列表间，可用于存放添加删除数据的按钮或其他操作 |
-| controlBtn | 位于筛列表可配置新增删除按钮后面                 |
-| searchForm | 位于条件筛选表单内部                       |
-| -          | columns对应的props                  |
+| 参数          | 说明              |
+|-------------|-----------------|
+| beforeTable | 位于搜索表单和数据列表中间   |
+| afterTable  | 位于数据列表和分页之间     |
+| -           | columns对应的props |
+
+
+## 示例
+```vue
+<template>
+  <div>
+    <ak-list
+      :columns="columns"
+      :searchData="searchData"
+    >
+      <template #control="scope">
+        <el-button>删除{{ scope.row.name }}</el-button>
+      </template>
+    </ak-list>
+  </div>
+</template>
+<script lang="tsx" setup>
+  import { ref } from 'vue'
+  const columns = ref([
+    {
+      prop: 'date',
+      label: 'Date',
+      width: 250,
+      help: '可快速将接口的各种形式的时间值格式化',
+      formatTime: 'dateTime'
+    },
+    {
+      prop: 'name',
+      label: 'Name',
+      width: 250
+    },
+    {
+      prop: 'sex',
+      label: 'Sex',
+      tag: { 0: 'info', 1: 'success' },
+      dict: { 0: '女', 1: '男' },
+      width: 150
+    },
+    {
+      prop: 'status',
+      label: '状态',
+      dict: { 1: '禁用', 2: '启用' },
+      width: 150
+    },
+    {
+      prop: 'type',
+      label: '类型',
+      tag: { 1: 'info', 2: 'success', 3: 'danger' },
+      dict: 'type', // 从全局dict里取type
+      width: 150
+    },
+    {
+      prop: 'control',
+      label: '操作',
+      width: 250
+    }
+  ])
+  const searchData = ref([
+    {
+      type: 'input',
+      name: 'name',
+      formItem: {
+        label: 'input2'
+      },
+      control: {
+        placeholder: '请输入'
+      }
+    },
+    {
+      type: 'select',
+      name: 'select',
+      formItem: {
+        label: 'select'
+      },
+      control: {
+        options: [
+          {
+            value: '选项1',
+            label: '黄金糕'
+          },
+          {
+            value: '选项2',
+            label: '双皮奶'
+          }
+        ]
+      }
+    }
+  ])
+</script>
+
+```

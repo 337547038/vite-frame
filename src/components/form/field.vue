@@ -153,7 +153,7 @@
   }
   const getUrlOptions = (load?: boolean) => {
     const { url, method = 'post', params = {}, afterResponse } = config.value
-    if (!url) {
+    if (!url || params === false) {
       return
     }
     const key = getOptionsKey(url)

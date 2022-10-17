@@ -124,6 +124,9 @@
           if (props.beforeSubmit && typeof props.beforeSubmit === 'function') {
             beforeSubmitPrams = props.beforeSubmit(model.value)
           }
+          if (beforeSubmitPrams === false) {
+            return
+          }
           const prams = Object.assign({}, model.value, beforeSubmitPrams)
           getRequest(props.submitApi, prams)
             .then((res: any) => {
@@ -173,6 +176,9 @@
       }
       const data = {} // 一些请求的参数
       const prams = Object.assign({}, data, beforeRequestPrams)
+      if (prams === false) {
+        return
+      }
       getRequest(props.getApi, prams)
         .then((res: any) => {
           let result = res.data

@@ -1,10 +1,15 @@
 <template>
-  <div>index</div>
+  <div>index2</div>
 </template>
 
 <script lang="ts" setup>
-  /*import { useAppStore } from '../store/app'
-  const counter = useAppStore()
-  counter.$patch({ count: counter.count + 1, msg: 'ok' })
-  counter.increment()*/
+  import { useRouter } from 'vue-router'
+  import { onMounted, nextTick } from 'vue'
+  const router = useRouter()
+  onMounted(() => {
+    console.log(router)
+    nextTick(() => {
+      router.push({ path: '/form' })
+    })
+  })
 </script>

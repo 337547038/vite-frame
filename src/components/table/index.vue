@@ -1,8 +1,9 @@
 <template>
   <div class="table-comm" ref="el">
     <div class="search-box" v-if="searchData?.length > 0">
-      <SearchForm :data="searchData" @submit="submit" />
+      <SearchForm v-bind="formConfig" :data="searchData" @submit="submit" />
     </div>
+    <slot name="beforeTable"></slot>
     <el-table :stripe="true" v-bind="tableProps" :data="tableData">
       <template v-for="(item, index) in columns" :key="index">
         <el-table-column v-bind="item">
@@ -47,6 +48,7 @@
         </el-table-column>
       </template>
     </el-table>
+    <slot name="afterTable"></slot>
     <div
       class="page"
       v-if="
@@ -65,6 +67,7 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <div :style="{ height: tableScrollMargin }" v-if="tableScrollMargin"></div>
   </div>
 </template>
 
@@ -84,7 +87,7 @@
   const props = withDefaults(
     defineProps<{
       tableProps?: object // 表格相关参数
-      columns?: object
+      columns: object
       searchData?: object
       apiKey?: string
       beforeRequest?: Function // 请求列表数据之前
@@ -92,6 +95,7 @@
       showPage?: object | boolean
       fixedBottomScroll?: boolean | string
       dict?: object
+      formConfig?: object
     }>(),
     {
       tableList: () => [],
@@ -125,6 +129,10 @@
     // 请求前将参数合并
     if (typeof props.beforeRequest === 'function') {
       beforePrams = props.beforeRequest(beforePrams)
+    }
+    if (beforePrams === false) {
+      // 返回false时取消请求
+      return
     }
     // 获取数据
     if (props.apiKey) {
@@ -174,6 +182,7 @@
       return row[item.prop]
     }
   }
+  const tableScrollMargin = ref('')
   const fixedBottomScroll = () => {
     if (props.fixedBottomScroll) {
       nextTick(() => {
@@ -205,6 +214,8 @@
           // 需要用marginBottom填充，以保持列表原有高度，避免页面的纵向滚动条变化导致页面滚动的不流畅
           // tableBodyWrapDom.style.marginBottom =
           //  tableBodyDom.offsetHeight - wrapHeight + 'px'
+          tableScrollMargin.value =
+            tableBodyDom.offsetHeight - wrapHeight + 'px'
         }
       })
     }

@@ -8,6 +8,7 @@
     5.实现radio等类选项数据动态获取/字典匹配；<br />
     6.实现动态联动请求；<br />
     7.实现div布局；<br />
+    以上功能仅需一段json代码，无需重复的el-form-item,el-input..等等
   </el-alert>
   <p></p>
   <ak-form
@@ -241,6 +242,16 @@ name:'Form'
       component: markRaw(TestCom),
       control: {
         placeholder: '自定义组件'
+      },
+      formItem: {
+        label: '自定义组件',
+        rules: [
+          {
+            required: true,
+            message: '自定义组件',
+            trigger: 'change'
+          }
+        ]
       }
     },
     {

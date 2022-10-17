@@ -9,13 +9,14 @@
       5.集成分页组件；<br />
       6.集成列表数据接口请求功能；<br />
       7.无需重复复制组件el-table-column；<br />
-      8.集成横向滚动条固定在浏览器底部(鼠标移到表格区域可见滚动条固定于底部)；<br />
+      8.集成横向滚动条固定在浏览器底部(小屏时鼠标移到表格区域可见滚动条固定于底部)；<br />
       9.快速设置表头帮助信息；<br />
     </el-alert>
     <p></p>
     <ak-list
       :columns="columns"
       :searchData="searchData"
+      :formConfig="formConfig"
       apiKey="tableList"
       :fixedBottomScroll="true"
       :beforeRequest="beforeRequest"
@@ -41,45 +42,53 @@ name:'List01'
 <script lang="tsx" setup>
   import { ref } from 'vue'
 
+  const formConfig = ref({
+    btnText: ['查询', '清空']
+  })
   const columns = ref([
     {
       prop: 'date',
       label: 'Date',
-      width: 150,
+      width: 250,
       help: '可快速将接口的各种形式的时间值格式化',
       formatTime: 'dateTime'
     },
     {
       prop: 'name',
-      label: 'Name'
+      label: 'Name',
+      width: 250
     },
     {
       prop: 'sex',
       label: 'Sex',
       tag: { 0: 'info', 1: 'success' },
-      dict: { 0: '女', 1: '男' }
+      dict: { 0: '女', 1: '男' },
+      width: 150
     },
     {
       prop: 'status',
       label: '状态',
-      dict: { 1: '禁用', 2: '启用' }
+      dict: { 1: '禁用', 2: '启用' },
+      width: 150
     },
     {
       prop: 'type',
       label: '类型',
       tag: { 1: 'info', 2: 'success', 3: 'danger' },
-      dict: 'type' // 从全局dict里取type
+      dict: 'type', // 从全局dict里取type
+      width: 150
     },
     {
       prop: 'control',
-      label: '操作'
+      label: '操作',
+      width: 250
     }
   ])
   const searchData = ref([
     {
       type: 'input',
+      name: 'name',
       formItem: {
-        prop: 'name',
         label: 'input2'
       },
       control: {
@@ -88,8 +97,8 @@ name:'List01'
     },
     {
       type: 'select',
+      name: 'select',
       formItem: {
-        prop: 'select',
         label: 'select'
       },
       control: {
