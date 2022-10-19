@@ -11,6 +11,7 @@
       7.无需重复复制组件el-table-column；<br />
       8.集成横向滚动条固定在浏览器底部(小屏时鼠标移到表格区域可见滚动条固定于底部)；<br />
       9.快速设置表头帮助信息；<br />
+      10.为空时输出自定义值
     </el-alert>
     <p></p>
     <ak-list
@@ -43,7 +44,8 @@ name:'List01'
   import { ref } from 'vue'
 
   const formConfig = ref({
-    btnText: ['查询', '清空']
+    btnText: ['查询', '清空'],
+    formProps: { inline: true }
   })
   const columns = ref([
     {
@@ -56,27 +58,31 @@ name:'List01'
     {
       prop: 'name',
       label: 'Name',
-      width: 250
+      width: 250,
+      placeholder: '/' // 为空时输出/
     },
     {
       prop: 'sex',
       label: 'Sex',
       tag: { 0: 'info', 1: 'success' },
       dict: { 0: '女', 1: '男' },
-      width: 150
+      width: 150,
+      placeholder: '/'
     },
     {
       prop: 'status',
       label: '状态',
       dict: { 1: '禁用', 2: '启用' },
-      width: 150
+      width: 150,
+      placeholder: '/'
     },
     {
       prop: 'type',
       label: '类型',
       tag: { 1: 'info', 2: 'success', 3: 'danger' },
       dict: 'type', // 从全局dict里取type
-      width: 150
+      width: 150,
+      placeholder: '/'
     },
     {
       prop: 'control',
@@ -121,6 +127,6 @@ name:'List01'
   }
   const afterResponse = (res: any) => {
     console.log(res)
-    return res.list // 需要return
+    return res // 需要return
   }
 </script>

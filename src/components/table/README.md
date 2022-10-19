@@ -40,13 +40,14 @@
 | fixedBottomScroll | boolean/string | 固定横向滚动条在底部,可为节点类名                  |
 
 ### columns 扩展
-| 参数         | 类型            | 说明                                                  |
-|------------|---------------|-----------------------------------------------------|
-| formatTime | string        | 时间类型快速格式化，可为`date/dateTime`或是其它指定格式，如`{y}年{m}月{d}日` |
-| help       | string        | 表头tooltip提示信息                                       |
-| tag        | object        | tag显示信息                                             |
-| dict       | object/string | dict字典匹配，为string时将匹配全局的dict                         |
-| -          | -             | 对应el-table-columns所有props                           |
+| 参数          | 类型            | 说明                                                  |
+|-------------|---------------|-----------------------------------------------------|
+| formatTime  | string        | 时间类型快速格式化，可为`date/dateTime`或是其它指定格式，如`{y}年{m}月{d}日` |
+| help        | string        | 表头tooltip提示信息                                       |
+| tag         | object        | tag显示信息                                             |
+| dict        | object/string | dict字典匹配，为string时将匹配全局的dict                         |
+| placeholder | string        | 为空时显示                                               |
+| -           | -             | 对应el-table-columns所有props                           |
 
 ### Methods
 | 参数      | 说明           |

@@ -1,7 +1,13 @@
 <template>
   <div class="table-comm" ref="el">
     <div class="search-box" v-if="searchData?.length > 0">
-      <SearchForm v-bind="formConfig" :data="searchData" @submit="submit" />
+      <SearchForm
+        v-bind="formConfig"
+        :data="searchData"
+        @submit="submit"
+        @cancel="submit"
+        ref="formEl"
+      />
     </div>
     <slot name="beforeTable"></slot>
     <el-table :stripe="true" v-bind="tableProps" :data="tableData">
@@ -38,11 +44,15 @@
           <template #default="scope" v-else-if="item.tag">
             <el-tag
               :type="item.tag[scope.row[item.prop]]"
-              v-if="scope.row[item.prop] !== undefined"
+              v-if="
+                scope.row[item.prop] !== '' &&
+                scope.row[item.prop] !== undefined
+              "
               >{{ getDictName(scope.row, item) }}
             </el-tag>
+            <span v-else-if="item.placeholder" v-text="item.placeholder"></span>
           </template>
-          <template #default="scope" v-else-if="item.dict">
+          <template #default="scope" v-else-if="item.dict || item.placeholder">
             {{ getDictName(scope.row, item) }}
           </template>
         </el-table-column>
@@ -109,6 +119,7 @@
     (e: 'currentChange', page: number): void
   }>()*/
   const el = ref()
+  const formEl = ref()
   const pageInfo = computed(() => {
     if (typeof props.showPage === 'object') {
       return props.showPage
@@ -138,14 +149,15 @@
     if (props.apiKey) {
       getRequest(props.apiKey, beforePrams)
         .then((res: any) => {
+          let result = res.data
           if (typeof props.afterResponse === 'function') {
-            tableData.value = props.afterResponse(res.data)
-          } else {
-            tableData.value = res.data.list
+            result = props.afterResponse(result)
           }
-          if (res.data.dict) {
+          tableData.value = result.list
+          if (result.dict) {
             // 合并接口返回的dict
-            state.dict = Object.assign({}, props.dict || {}, res.data.dict)
+            state.dict = Object.assign({}, props.dict || {}, result.dict)
+            formEl.value.setOptions(state.dict) // 搜索表单也使用同样的dict
           }
           fixedBottomScroll()
         })
@@ -167,19 +179,23 @@
   const submit = (obj: any) => {
     console.log(obj)
     state.currentPage = 1
-    getData(obj)
+    getData(obj || {})
   }
   // 匹配字典
   const getDictName = (row: any, item: any) => {
+    const val = row[item.prop]
+    if (item.placeholder && val === '') {
+      return item.placeholder
+    }
     if (item.dict) {
       if (typeof item.dict === 'string') {
         // 从全局dict里取
-        return state.dict[item.dict]?.[row[item.prop]]
+        return state.dict[item.dict]?.[val]
       } else {
-        return item.dict[row[item.prop]]
+        return item.dict[val]
       }
     } else {
-      return row[item.prop]
+      return val
     }
   }
   const tableScrollMargin = ref('')
