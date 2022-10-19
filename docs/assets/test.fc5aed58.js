@@ -1,1 +1,0 @@
-import{y as e,b as t,e as o}from"./index.1b5212cd.js";const s={name:"test",data(){return{}},props:{},components:{},methods:{},computed:{},mounted(){}};function n(r,c,a,p,d,m){return t(),o("div")}const u=e(s,[["render",n]]);export{u as default};
