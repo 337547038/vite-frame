@@ -109,8 +109,8 @@
     }>(),
     {
       tableList: () => [],
-      showPage: true
-      // fixedBottomScroll: '.common-main' // 当前框架滚动区域
+      showPage: true,
+      fixedBottomScroll: true // 当前框架滚动区域
     }
   )
   /*  const emits = defineEmits<{
@@ -236,34 +236,28 @@
       })
     }
   }
+  const scrollBox = computed(() => {
+    const scroll =
+      typeof props.fixedBottomScroll === 'string'
+        ? props.fixedBottomScroll
+        : '.common-main'
+    const box = document.querySelector(scroll)
+    return box ? box : document
+  })
   onMounted(() => {
     getData()
     if (props.fixedBottomScroll) {
       // 目前架构的滚动区域为common-main，不是document
       // document.addEventListener('scroll', fixedBottomScroll)
       nextTick(() => {
-        const scroll =
-          typeof props.fixedBottomScroll === 'string'
-            ? props.fixedBottomScroll
-            : '.common-main'
-        const scrollEl = document.querySelector(scroll)
-        if (scrollEl) {
-          scrollEl.addEventListener('scroll', fixedBottomScroll)
-        }
+        scrollBox.value.addEventListener('scroll', fixedBottomScroll)
         window.addEventListener('resize', fixedBottomScroll)
       })
     }
   })
   onBeforeUnmount(() => {
     if (props.fixedBottomScroll) {
-      const scroll =
-        typeof props.fixedBottomScroll === 'string'
-          ? props.fixedBottomScroll
-          : '.common-main'
-      const scrollEl = document.querySelector(scroll)
-      if (scrollEl) {
-        scrollEl.removeEventListener('scroll', fixedBottomScroll)
-      }
+      scrollBox.value.removeEventListener('scroll', fixedBottomScroll)
       window.removeEventListener('resize', fixedBottomScroll)
     }
   })

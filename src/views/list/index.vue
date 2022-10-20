@@ -19,13 +19,16 @@
       :searchData="searchData"
       :formConfig="formConfig"
       apiKey="tableList"
-      :fixedBottomScroll="true"
       :beforeRequest="beforeRequest"
       :afterResponse="afterResponse"
       :dict="{ type1: { 1: '类型11', 2: '类型21', 3: '类型31' } }"
+      ref="listEl"
     >
       <template #control="scope">
         <el-button>删除{{ scope.row.name }}</el-button>
+      </template>
+      <template #beforeTable>
+        <el-button @click="getSelection">获取勾选值</el-button>
       </template>
     </ak-list>
   </div>
@@ -43,11 +46,16 @@ name:'List01'
 <script lang="tsx" setup>
   import { ref } from 'vue'
 
+  const listEl = ref()
   const formConfig = ref({
     btnText: ['查询', '清空'],
     formProps: { inline: true }
   })
   const columns = ref([
+    {
+      type: 'selection',
+      label: '序号'
+    },
     {
       prop: 'date',
       label: 'Date',
@@ -119,6 +127,16 @@ name:'List01'
           }
         ]
       }
+    },
+    {
+      type: 'checkbox',
+      name: 'type',
+      formItem: {
+        label: 'status'
+      },
+      control: {
+        options: [] // 使用接口返回的type选项数据
+      }
     }
   ])
   const beforeRequest = (params: any) => {
@@ -128,5 +146,9 @@ name:'List01'
   const afterResponse = (res: any) => {
     console.log(res)
     return res // 需要return
+  }
+  const getSelection = () => {
+    const table = listEl.value.table.getSelectionRows()
+    console.log(table)
   }
 </script>

@@ -55,7 +55,7 @@ el-table二次封装，实现功能：
 ```javascript
 <script lang="tsx">
   export default {
-  name: 'XXXXX'
+  name: 'XXXXX' // 注意路由name是不能重复的
 }
 </script>
 ```
