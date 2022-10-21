@@ -15,7 +15,7 @@ export const dateFormatting = (time: any, cFormat?: string) => {
     s: date.getSeconds(),
     a: date.getDay()
   }
-  const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
+  return format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     if (key === 'a')
       return ['一', '二', '三', '四', '五', '六', '日'][value - 1]
@@ -24,7 +24,6 @@ export const dateFormatting = (time: any, cFormat?: string) => {
     }
     return value || 0
   })
-  return timeStr
 }
 // 动态远程加载script脚本
 export function loadScript(src: string) {

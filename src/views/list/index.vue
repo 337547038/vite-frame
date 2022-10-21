@@ -23,12 +23,11 @@
       :afterResponse="afterResponse"
       :dict="{ type1: { 1: '类型11', 2: '类型21', 3: '类型31' } }"
       ref="listEl"
+      :controlBtn="controlBtn"
+      @control-btn-click="getSelection"
     >
       <template #control="scope">
         <el-button>删除{{ scope.row.name }}</el-button>
-      </template>
-      <template #beforeTable>
-        <el-button @click="getSelection">获取勾选值</el-button>
       </template>
     </ak-list>
   </div>
@@ -139,16 +138,49 @@ name:'List01'
       }
     }
   ])
+  const controlBtn = [
+    {
+      plain: true,
+      label: '新增',
+      type: 'primary',
+      icon: 'plus'
+    },
+    {
+      plain: true,
+      label: '修改',
+      type: 'success',
+      icon: 'edit'
+    },
+    {
+      plain: true,
+      label: '删除',
+      type: 'danger',
+      icon: 'delete'
+    },
+    {
+      plain: true,
+      label: '导出',
+      type: 'warning',
+      icon: 'download'
+    },
+    {
+      plain: true,
+      label: '刷新',
+      type: 'info',
+      icon: 'refresh'
+    }
+  ]
   const beforeRequest = (params: any) => {
-    console.log(params)
+    // console.log(params)
     return params // 需要return
   }
   const afterResponse = (res: any) => {
-    console.log(res)
+    // console.log(res)
     return res // 需要return
   }
-  const getSelection = () => {
+  const getSelection = (obj: any) => {
     const table = listEl.value.table.getSelectionRows()
     console.log(table)
+    console.log(obj)
   }
 </script>

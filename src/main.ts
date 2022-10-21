@@ -10,6 +10,14 @@ import AKFormList from './components/index'
 const pinia = createPinia()
 const app = createApp(App)
 app.use(pinia).use(ElementPlus).use(router).use(AKFormList).mount('#app')
+
+/*app.config.errorHandler = (err, instance, info) => {
+  // 向追踪服务报告错误
+  console.log('errorHandler')
+  console.log(err)
+  console.log(instance)
+  console.log(info)
+}*/
 // 全局注册icon
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 

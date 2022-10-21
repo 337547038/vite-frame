@@ -38,6 +38,7 @@
 | showPage          | boolean/true   | 是否显示分页信息                           |
 | dict              | object         | 用于匹配的字典数据，一般不设置，从接口获取并合并           |
 | fixedBottomScroll | boolean/string | 固定横向滚动条在底部,可为节点类名                  |
+| controlBtn        | array          | 控制按钮                               |
 
 ### columns 扩展
 | 参数          | 类型            | 说明                                                  |
@@ -47,19 +48,25 @@
 | tag         | object        | tag显示信息                                             |
 | dict        | object/string | dict字典匹配，为string时将匹配全局的dict                         |
 | placeholder | string        | 为空时显示                                               |
-| -           | -             | 对应el-table-columns所有props                           |
 
 ### Methods
 | 参数      | 说明           |
 |---------|--------------|
 | getData | 列表请求方法，可手动调用 |
+| table   | 表格所有方法集合     |
+
+### Event
+| 参数         | 说明       |
+|------------|----------|
+| controlBtn | 控制按钮点击事件 |
 
 
 ### Slot
 | 参数          | 说明              |
 |-------------|-----------------|
-| beforeTable | 位于搜索表单和数据列表中间   |
+| beforeTable | 位于数据表格列表上方      |
 | afterTable  | 位于数据列表和分页之间     |
+| afterSearch | 位于条件筛选表单下方      |
 | -           | columns对应的props |
 
 

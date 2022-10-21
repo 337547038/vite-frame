@@ -9,8 +9,19 @@
         ref="formEl"
       />
     </div>
+    <slot name="afterSearch"></slot>
+    <div class="btn-group" v-if="controlBtn.length">
+      <el-button
+        v-for="(item, index) in controlBtn"
+        :key="index"
+        v-bind="item"
+        @click="controlBtnClick(item)"
+      >
+        {{ item.label }}
+      </el-button>
+    </div>
     <slot name="beforeTable"></slot>
-    <el-table :stripe="true" v-bind="tableProps" :data="tableData">
+    <el-table :stripe="true" v-bind="tableProps" :data="tableData" ref="table">
       <template v-for="(item, index) in columns" :key="index">
         <el-table-column v-bind="item">
           <template #header="scope" v-if="item.help">
@@ -106,20 +117,23 @@
       fixedBottomScroll?: boolean | string
       dict?: object
       formConfig?: object
+      controlBtn?: any // 控制按钮
     }>(),
     {
       tableList: () => [],
       showPage: true,
-      fixedBottomScroll: true // 当前框架滚动区域
+      fixedBottomScroll: true, // 当前框架滚动区域
+      controlBtn: () => {
+        return []
+      }
     }
   )
-  /*  const emits = defineEmits<{
-    (e: 'submit', obj: any): void
-    (e: 'sizeChange', page: number): void
-    (e: 'currentChange', page: number): void
-  }>()*/
+  const emits = defineEmits<{
+    (e: 'controlBtnClick', obj: any): void
+  }>()
   const el = ref()
   const formEl = ref()
+  const table = ref()
   const pageInfo = computed(() => {
     if (typeof props.showPage === 'object') {
       return props.showPage
@@ -244,6 +258,9 @@
     const box = document.querySelector(scroll)
     return box ? box : document
   })
+  const controlBtnClick = (obj: any) => {
+    emits('controlBtnClick', obj)
+  }
   onMounted(() => {
     getData()
     if (props.fixedBottomScroll) {
@@ -261,6 +278,7 @@
       window.removeEventListener('resize', fixedBottomScroll)
     }
   })
+  defineExpose({ table, getData })
 </script>
 <style lang="scss">
   .table-comm {
@@ -268,6 +286,9 @@
       display: flex;
       justify-content: flex-end;
       padding-top: 10px;
+    }
+    .btn-group {
+      margin-bottom: 10px;
     }
     .el-scrollbar__view {
       overflow-x: auto;
