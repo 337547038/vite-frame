@@ -12,7 +12,7 @@
 | btnText       | 表单提交按钮文案，默认['确定', '取消']，设为false不显示  |
 | getApi        | 表单获取数据接口api，当表单存在修改时，可使用此参数请求接口     |
 | beforeRequest | 获取数据提交前方法，仅在getApi为真时，返回false时取消请求  |
-| afterRequest  | 获取数据提交后方法，仅在getApi为真时               |
+| afterResponse | 获取数据提交后方法，仅在getApi为真时               |
 | hideField     | 需要隐藏的表单项集合                          |
 
 ## Form Event

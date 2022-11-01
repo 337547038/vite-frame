@@ -153,7 +153,7 @@
     }) // 一些初始参数
     // 请求前将参数合并
     if (typeof props.beforeRequest === 'function') {
-      beforePrams = props.beforeRequest(beforePrams)
+      beforePrams = props.beforeRequest(beforePrams) ?? beforePrams
     }
     if (beforePrams === false) {
       // 返回false时取消请求
@@ -165,7 +165,7 @@
         .then((res: any) => {
           let result = res.data
           if (typeof props.afterResponse === 'function') {
-            result = props.afterResponse(result)
+            result = props.afterResponse(result) ?? result
           }
           tableData.value = result.list
           if (result.dict) {

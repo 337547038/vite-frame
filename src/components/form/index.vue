@@ -64,7 +64,7 @@
       submitApi?: string // 表单提交接口api
       getApi?: string // 获取接口数据方法
       beforeRequest?: Function
-      afterRequest?: Function
+      afterResponse?: Function
       hideField?: string[]
     }>(),
     {
@@ -127,7 +127,7 @@
           if (beforeSubmitPrams === false) {
             return
           }
-          const prams = Object.assign({}, model.value, beforeSubmitPrams)
+          const prams = Object.assign({}, model.value, beforeSubmitPrams || {})
           getRequest(props.submitApi, prams)
             .then((res: any) => {
               if (typeof props.afterSubmit === 'function') {
@@ -172,18 +172,21 @@
     if (props.getApi) {
       let beforeRequestPrams = {}
       if (props.beforeRequest && typeof props.beforeRequest === 'function') {
-        beforeRequestPrams = props.beforeRequest() || {}
+        beforeRequestPrams = props.beforeRequest()
       }
-      const data = {} // 一些请求的参数
-      const prams = Object.assign({}, data, beforeRequestPrams)
-      if (prams === false) {
+      if (beforeRequestPrams === false) {
         return
       }
+      const data = {} // 一些请求的参数
+      const prams = Object.assign({}, data, beforeRequestPrams || {})
       getRequest(props.getApi, prams)
         .then((res: any) => {
           let result = res.data
-          if (props.afterRequest && typeof props.afterRequest === 'function') {
-            result = props.afterRequest(res.data)
+          if (
+            props.afterResponse &&
+            typeof props.afterResponse === 'function'
+          ) {
+            result = props.afterResponse(res.data)
           }
           if (result.dict) {
             optValue.value = result.dict
@@ -193,8 +196,8 @@
         })
         .catch((res: any) => {
           // 这里作全局异常提示处理
-          if (typeof props.afterRequest === 'function') {
-            props.afterRequest(res, 'catch')
+          if (typeof props.afterResponse === 'function') {
+            props.afterResponse(res, 'catch')
           }
         })
     }
