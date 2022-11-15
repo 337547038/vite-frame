@@ -70,6 +70,7 @@
         | 'slider'
         | 'component'
       modelValue?: any
+      prop?: string
     }>(),
     {
       type: 'input',
@@ -92,7 +93,7 @@
     return props.data.config || {}
   })
   const prop = computed(() => {
-    return props.data.name
+    return props.prop || props.data.name
   })
   const options = ref(control.value.options)
   const watchValue = ref()

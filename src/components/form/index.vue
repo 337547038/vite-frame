@@ -1,5 +1,5 @@
 <template>
-  <el-form v-bind="formProps" ref="formEl" :model="model">
+  <el-form v-bind="formProps" ref="formEl" :model="model" class="comm-form">
     <template v-for="(item, index) in data" :key="index">
       <template v-if="getShow(item)">
         <div v-if="item.type === 'div'" v-bind="item.control" class="div-row">
@@ -13,6 +13,12 @@
             />
           </template>
         </div>
+        <flex
+          v-else-if="item.type === 'flex'"
+          :data="item"
+          :model="model"
+          @change="changeField"
+        />
         <div
           v-else-if="item.type === 'title'"
           v-bind="item.control"
@@ -43,6 +49,7 @@
 <script setup lang="ts">
   import { ref, onMounted, provide } from 'vue'
   import Field from './field.vue'
+  import Flex from './flex.vue'
   import { getRequest } from '@/api'
 
   interface formData {
@@ -53,7 +60,10 @@
     config?: any
     list?: any
     component?: any
+    flexData?: any
+    title?: any
   }
+
   const props = withDefaults(
     defineProps<{
       data?: formData[] // 表单项数据
@@ -91,6 +101,9 @@
       }
       if (item.type === 'div') {
         getModelValue(item.list)
+      }
+      if (item.type === 'flex') {
+        model.value[item.name] = item.flexData
       }
     })
   }
@@ -207,3 +220,18 @@
   })
   defineExpose({ onSubmit, onReset, setValue, getValue, setOptions })
 </script>
+<style lang="scss">
+  .comm-form {
+    .form-flex-row {
+      display: flex;
+      justify-content: space-between;
+      .row {
+        flex: 2;
+        margin-right: 5px;
+      }
+    }
+    .flex-add-btn {
+      margin-bottom: 18px;
+    }
+  }
+</style>

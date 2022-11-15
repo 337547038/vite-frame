@@ -15,12 +15,7 @@
 name:'Form2'
 }
 </route>
-<script lang="ts">
-  export default {
-    name: 'Form2'
-  }
-</script>
-<script lang="ts" setup>
+<script lang="ts" setup name="Form2">
   import { ref } from 'vue'
   import FormField from '@/components/form/field.vue'
   const name = ref('')

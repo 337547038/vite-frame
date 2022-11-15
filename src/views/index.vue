@@ -54,7 +54,9 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+
+</script>
 <style scoped>
   div,
   h3,

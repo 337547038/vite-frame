@@ -84,6 +84,8 @@
   }
 
   const setTabViews = () => {
+    console.log('route')
+    console.log(route.name)
     // 当前组件不需要缓存
     if (route.meta?.keepAlive === false) {
       activeName.value = '' // 清空选中状态

@@ -29,12 +29,7 @@
 name:'Form'
 }
 </route>
-<script lang="ts">
-  export default {
-    name: 'Form'
-  }
-</script>
-<script lang="ts" setup>
+<script lang="ts" setup name="Form">
   import { ref, markRaw } from 'vue'
   import TestCom from './test.vue'
   const data = ref([
@@ -280,6 +275,41 @@ name:'Form'
           control: {}
         }
       ]
+    },
+    {
+      type: 'flex',
+      name: 'flex',
+      control: {},
+      flexData: [],
+      list: [
+        {
+          type: 'input',
+          name: 'flex1',
+          formItem: {
+            label: 'flex1',
+            rules: [
+              {
+                required: true,
+                message: '不能为空',
+                trigger: 'change'
+              }
+            ]
+          },
+          control: {}
+        },
+        {
+          type: 'input',
+          name: 'flex2',
+          formItem: {
+            label: 'flex2'
+          },
+          control: {}
+        }
+      ],
+      config: {
+        add: '添加',
+        del: 'del'
+      }
     }
   ])
   const formProps = ref({

@@ -3,9 +3,12 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import Pages from 'vite-plugin-pages'
 import * as path from 'path'
+import { routeName } from './src/utils/vitePlugins'
+// @ts-ignore
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    routeName(),
     vue(),
     vueJsx({}),
     Pages({

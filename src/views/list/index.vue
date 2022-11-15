@@ -37,12 +37,7 @@
 name:'List01'
 }
 </route>
-<script lang="tsx">
-  export default {
-    name: 'List01'
-  }
-</script>
-<script lang="tsx" setup>
+<script lang="tsx" setup name="List01">
   import { ref } from 'vue'
 
   const listEl = ref()

@@ -33,14 +33,14 @@
 
 ## Form data
 
-| 参数         | 说明                                                                                                                      |
-|------------|-------------------------------------------------------------------------------------------------------------------------|
-| type       | 组件类型，支持`input、cascader、checkbox、datePicker、inputNumber、select、switch、timePicker、timeSelect、upload、slider、component、div` |
-| formItem   | 表单formItem组件相关参数                                                                                                        |
-| control    | 对应type类型的组件所有参数                                                                                                         |
-| modelValue | 当前表单值                                                                                                                   |
-| component  | import的组件，仅在`type=component`时                                                                                           |
-| config     | 其他一些配置信息                                                                                                                |
+| 参数         | 说明                                                                                                                           |
+|------------|------------------------------------------------------------------------------------------------------------------------------|
+| type       | 组件类型，支持`input、cascader、checkbox、datePicker、inputNumber、select、switch、timePicker、timeSelect、upload、slider、component、div、flex` |
+| formItem   | 表单formItem组件相关参数                                                                                                             |
+| control    | 对应type类型的组件所有参数                                                                                                              |
+| modelValue | 当前表单值                                                                                                                        |
+| component  | import的组件，仅在`type=component`时                                                                                                |
+| config     | 其他一些配置信息                                                                                                                     |
 
 ## data.customRules校验
 | 类型      | 说明                                                                                          |
@@ -302,6 +302,41 @@
           control: {}
         }
       ]
+    },
+    {
+      type: 'flex',
+      name: 'flex',
+      control: {},
+      flexData: [],
+      list: [
+        {
+          type: 'input',
+          name: 'flex1',
+          formItem: {
+            label: 'flex1',
+            rules: [
+              {
+                required: true,
+                message: '不能为空',
+                trigger: 'change'
+              }
+            ]
+          },
+          control: {}
+        },
+        {
+          type: 'input',
+          name: 'flex2',
+          formItem: {
+            label: 'flex2'
+          },
+          control: {}
+        }
+      ],
+      config: {
+        add: '添加',
+        del: 'del'
+      }
     }
   ])
 </script>
