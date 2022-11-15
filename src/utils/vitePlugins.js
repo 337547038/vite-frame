@@ -46,7 +46,7 @@ export const routeName = () => {
 </script>`
         }
         // console.log(src + append)
-        console.log(append)
+        // console.log(append)
         return {
           code: code + append,
           map: null
