@@ -10,6 +10,7 @@
               :model="model"
               :data="list"
               @change="changeField(list.name, $event)"
+              @slot-change="slotChange"
             />
           </template>
         </div>
@@ -33,6 +34,7 @@
           :model="model"
           :data="item"
           @change="changeField(item.name, $event)"
+          @slot-change="slotChange"
         />
       </template>
     </template>
@@ -98,6 +100,16 @@
     data.forEach((item: formData) => {
       if (item.name) {
         model.value[item.name] = item.control?.modelValue
+      }
+      if (item.config && item.type === 'input') {
+        // input select插槽
+        if (typeof item.config.append === 'object') {
+          model.value[item.config.append.name] = item.config.append.defaultValue
+        }
+        if (typeof item.config.prepend === 'object') {
+          model.value[item.config.prepend.name] =
+            item.config.prepend.defaultValue
+        }
       }
       if (item.type === 'div') {
         getModelValue(item.list)
@@ -172,6 +184,7 @@
   const getValue = () => {
     return model.value
   }
+  provide('setValue', model)
   const optValue = ref()
   provide('setOptions', optValue)
   const setOptions = (obj: any) => {
@@ -214,6 +227,11 @@
           }
         })
     }
+  }
+  const slotChange = (name: string, val: any) => {
+    emits('change', name, val)
+    // 更新model
+    model.value[name] = val
   }
   onMounted(() => {
     getData()

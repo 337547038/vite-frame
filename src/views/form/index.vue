@@ -8,6 +8,8 @@
     5.实现radio等类选项数据动态获取/字典匹配；<br />
     6.实现动态联动请求；<br />
     7.实现div布局；<br />
+    8.实现弹性布局；<br />
+    9.实现input插槽；<br />
     以上功能仅需一段json代码，无需重复的el-form-item,el-input..等等
   </el-alert>
   <p></p>
@@ -286,7 +288,7 @@ name:'Form'
           type: 'input',
           name: 'flex1',
           formItem: {
-            label: 'flex1',
+            label: '弹性布局',
             rules: [
               {
                 required: true,
@@ -301,7 +303,7 @@ name:'Form'
           type: 'input',
           name: 'flex2',
           formItem: {
-            label: 'flex2'
+            label: '弹性布局2'
           },
           control: {}
         }
@@ -309,6 +311,34 @@ name:'Form'
       config: {
         add: '添加',
         del: 'del'
+      }
+    },
+    {
+      type: 'input',
+      name: 'textSlot',
+      formItem: {
+        // formItem参数
+        label: '用户名'
+      },
+      control: {
+        // 当前控件参数
+        modelValue: '',
+        placeholder: '请输入'
+      },
+      config: {
+        prepend: 'http', // 字符串时仅支持文字，同时可支持select下拉，见append设置
+        append: {
+          name: 'inputSelect', // 必须的，取值赋值使用
+          options: {
+            // 初始下拉项初始值，同时支持setOptions设置
+            '0': '年',
+            '1': '月',
+            '2': '日',
+            '3': '小时'
+          },
+          placeholder: 'placeholder',
+          defaultValue: '0' // 初始选中值
+        }
       }
     }
   ])

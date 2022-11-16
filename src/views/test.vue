@@ -23,6 +23,21 @@
         onChange: (val: string) => {
           console.log(val)
         }
+      },
+      config: {
+        prepend: 'http', // 字符串时仅支持文字，同时可支持select下拉，见append设置
+        append: {
+          name: 'inputSelect', // 必须的，取值赋值使用
+          options: {
+            // 初始下拉项初始值，同时支持setOptions设置
+            '0': '年',
+            '1': '月',
+            '2': '日',
+            '3': '小时'
+          },
+          placeholder: 'placeholder',
+          defaultValue: '0' // 初始选中值
+        }
       }
     },
     {
@@ -74,7 +89,14 @@
           flex1: 'flex11',
           flex2: 'flex22'
         }
-      ]
+      ],
+      inputSelect: '2'
+    })
+    form.value.setOptions({
+      inputSelect: {
+        '1': '小时',
+        '2': '分钟'
+      }
     })
   }
 </script>

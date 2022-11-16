@@ -39,6 +39,47 @@
       />
     </el-select>
     <!--    <el-upload v-else-if="type === 'select'">根据具体项目做一个或多个不机样式</el-upload>-->
+    <el-input
+      :is="currentComponent"
+      v-bind="control"
+      v-model="fieldValue"
+      v-else-if="type === 'input'"
+    >
+      <template #prepend v-if="typeof config.prepend === 'string'">
+        {{ config.prepend }}
+      </template>
+      <template #prepend v-else-if="typeof config.prepend === 'object'">
+        <el-select
+          v-model="prependValue"
+          :placeholder="config.placeholder"
+          @change="slotSelectChange(config.prepend.name, $event)"
+        >
+          <el-option
+            v-for="item in prependOptions"
+            :label="item.label"
+            :value="item.value"
+            :key="item.value"
+          />
+        </el-select>
+      </template>
+      <template #append v-if="typeof config.append === 'string'">
+        {{ config.append }}
+      </template>
+      <template #append v-else-if="typeof config.append === 'object'">
+        <el-select
+          v-model="appendValue"
+          :placeholder="config.placeholder"
+          @change="slotSelectChange(config.append.name, $event)"
+        >
+          <el-option
+            v-for="item in appendOptions"
+            :label="item.label"
+            :value="item.value"
+            :key="item.value"
+          />
+        </el-select>
+      </template>
+    </el-input>
     <component
       :is="currentComponent"
       v-bind="control"
@@ -81,8 +122,24 @@
   )
   const emits = defineEmits<{
     (e: 'update:modelValue', value: any): void
+    (e: 'slotChange', name: string, value: any): void
     (e: 'change', value: any): void
   }>()
+  const formatDict = (obj: any) => {
+    // dict支持两种格式select:{1:'选项1',2:'选项2'}或select:[{label:'选项1',value:'1'}]
+    if (obj && Object.prototype.toString.call(obj) === '[object Object]') {
+      // object时,转为array
+      const temp = []
+      for (const key in obj) {
+        temp.push({
+          label: obj[key],
+          value: key
+        })
+      }
+      return temp
+    }
+    return obj
+  }
   const formItem = computed(() => {
     return props.data.formItem || {}
   })
@@ -96,6 +153,8 @@
     return props.prop || props.data.name
   })
   const options = ref(control.value.options)
+  const appendOptions = ref(formatDict(props.data.config?.append?.options))
+  const prependOptions = ref(formatDict(config.value.prepend?.options))
   const watchValue = ref()
   const fieldValue = ref(props.modelValue)
   watch(
@@ -219,24 +278,45 @@
       if (val[key]) {
         options.value = formatDict(val[key])
       }
+      // 设置input select slot
+      if (props.data.type === 'input' && props.data.config) {
+        const { append, prepend } = props.data.config
+        if (typeof append === 'object' && val[append.name]) {
+          appendOptions.value = formatDict(val[append.name])
+        }
+        if (typeof prepend === 'object' && val[prepend.name]) {
+          prependOptions.value = formatDict(val[prepend.name])
+        }
+      }
     }
   )
-  const formatDict = (obj: any) => {
-    // dict支持两种格式select:{1:'选项1',2:'选项2'}或select:[{label:'选项1',value:'1'}]
-    if (obj && Object.prototype.toString.call(obj) === '[object Object]') {
-      // object时,转为array
-      const temp = []
-      for (const key in obj) {
-        temp.push({
-          label: obj[key],
-          value: key
-        })
+  // 以下为input slot相关
+  const appendValue = ref('')
+  const prependValue = ref('')
+  const getInputSlotValue = (val?: any) => {
+    if (props.data.type === 'input' && props.data.config) {
+      if (typeof config.value.append === 'object') {
+        const name = config.value.append.name
+        appendValue.value = (val && val[name]) || props.model[name]
       }
-      return temp
+      if (typeof config.value.prepend === 'object') {
+        const name = config.value.prepend.name
+        prependValue.value = (val && val[name]) || props.model[name]
+      }
     }
-    return obj
   }
+  const slotSelectChange = (name: string, value: any) => {
+    emits('slotChange', name, value)
+  }
+  const setValue = inject('setValue', {}) as any
+  watch(
+    () => setValue.value,
+    () => {
+      getInputSlotValue(setValue.value)
+    }
+  )
   onMounted(() => {
     getUrlOptions()
+    getInputSlotValue()
   })
 </script>
