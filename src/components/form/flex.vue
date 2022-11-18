@@ -9,7 +9,9 @@
               v-model="flex[list.name]"
               :prop="`${data.name}.${i}.${list.name}`"
               :data="list"
+              :model="flexData[i]"
               @change="changeField(list.name, $event)"
+              @slot-change="slotChange($event, i)"
             />
           </template>
         </div>
@@ -70,6 +72,15 @@
     let temp: any = {}
     props.data.list.forEach((item: any) => {
       temp[item.name] = item.control.modelValue
+      if (item.config && item.type === 'input') {
+        // input select插槽
+        if (typeof item.config.append === 'object') {
+          temp[item.config.append.name] = item.config.append.defaultValue
+        }
+        if (typeof item.config.prepend === 'object') {
+          temp[item.config.prepend.name] = item.config.prepend.defaultValue
+        }
+      }
     })
     return temp
   }
@@ -80,6 +91,9 @@
     if (flexData.value.length === 0) {
       addRow() // 初始时添加一组
     }
+  }
+  const slotChange = (obj: any, index: number) => {
+    flexData.value[index][obj.name] = obj.value
   }
   onMounted(() => {
     init()

@@ -10,6 +10,21 @@
 
   const data = ref([
     {
+      type: 'upload',
+      name: 'upload',
+      formItem: {
+        // formItem参数
+        label: '图片上传'
+      },
+      control: {
+        // 当前控件参数
+        modelValue: [],
+        action: 'https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15',
+        listType: 'picture-card'
+      },
+      config: {}
+    },
+    {
       type: 'input',
       name: 'text',
       formItem: {
@@ -36,7 +51,8 @@
             '3': '小时'
           },
           placeholder: 'placeholder',
-          defaultValue: '0' // 初始选中值
+          defaultValue: '0', // 初始选中值
+          style: { width: '78px' }
         }
       }
     },
@@ -55,11 +71,28 @@
               {
                 required: true,
                 message: '不能为空',
-                trigger: 'change'
+                trigger: 'blur'
               }
             ]
           },
-          control: {}
+          control: {
+            modelValue: ''
+          },
+          config: {
+            append: {
+              name: 'inputSelect1', // 必须的，取值赋值使用
+              options: {
+                // 初始下拉项初始值，同时支持setOptions设置
+                '0': '年',
+                '1': '月',
+                '2': '日',
+                '3': '小时'
+              },
+              placeholder: 'placeholder',
+              defaultValue: '0', // 初始选中值
+              style: { width: '78px' }
+            }
+          }
         },
         {
           type: 'input',

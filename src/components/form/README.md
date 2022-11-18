@@ -363,7 +363,9 @@
           },
           placeholder: 'placeholder',
           defaultValue: '0' // 初始选中值
-        }
+        },
+        suffix:'suffix', // 输入框头部内容，仅支持字符串文本
+        prefix:'prefix' // 输入框尾部内容，仅支持字符串文本
       }
     }
   ])

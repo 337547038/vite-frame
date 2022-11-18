@@ -38,9 +38,13 @@
         :value="item.value"
       />
     </el-select>
-    <!--    <el-upload v-else-if="type === 'select'">根据具体项目做一个或多个不机样式</el-upload>-->
+    <el-upload
+      v-else-if="type === 'upload'"
+      v-bind="control"
+      v-model:file-list="fieldValue"
+      ><el-icon><Plus /></el-icon
+    ></el-upload>
     <el-input
-      :is="currentComponent"
       v-bind="control"
       v-model="fieldValue"
       v-else-if="type === 'input'"
@@ -53,6 +57,7 @@
           v-model="prependValue"
           :placeholder="config.placeholder"
           @change="slotSelectChange(config.prepend.name, $event)"
+          :style="config.prepend.style"
         >
           <el-option
             v-for="item in prependOptions"
@@ -70,6 +75,7 @@
           v-model="appendValue"
           :placeholder="config.placeholder"
           @change="slotSelectChange(config.append.name, $event)"
+          :style="config.append.style"
         >
           <el-option
             v-for="item in appendOptions"
@@ -79,6 +85,8 @@
           />
         </el-select>
       </template>
+      <template #suffix v-if="config.suffix">{{ config.suffix }}</template>
+      <template #prefix v-if="config.prefix">{{ config.prefix }}</template>
     </el-input>
     <component
       :is="currentComponent"
@@ -122,7 +130,7 @@
   )
   const emits = defineEmits<{
     (e: 'update:modelValue', value: any): void
-    (e: 'slotChange', name: string, value: any): void
+    (e: 'slotChange', obj: any): void
     (e: 'change', value: any): void
   }>()
   const formatDict = (obj: any) => {
@@ -154,7 +162,7 @@
   })
   const options = ref(control.value.options)
   const appendOptions = ref(formatDict(props.data.config?.append?.options))
-  const prependOptions = ref(formatDict(config.value.prepend?.options))
+  const prependOptions = ref(formatDict(props.data.config?.prepend?.options))
   const watchValue = ref()
   const fieldValue = ref(props.modelValue)
   watch(
@@ -291,8 +299,9 @@
     }
   )
   // 以下为input slot相关
-  const appendValue = ref('')
-  const prependValue = ref('')
+  const appendValue = ref()
+  const prependValue = ref()
+  // 修改以上两个值时，会触发当前form-item的校验规则，可修改trigger=blur，或在表单初始化后清空校验规则
   const getInputSlotValue = (val?: any) => {
     if (props.data.type === 'input' && props.data.config) {
       if (typeof config.value.append === 'object') {
@@ -306,7 +315,7 @@
     }
   }
   const slotSelectChange = (name: string, value: any) => {
-    emits('slotChange', name, value)
+    emits('slotChange', { name: name, value: value })
   }
   const setValue = inject('setValue', {}) as any
   watch(

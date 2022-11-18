@@ -228,10 +228,10 @@
         })
     }
   }
-  const slotChange = (name: string, val: any) => {
-    emits('change', name, val)
+  const slotChange = (obj: any) => {
+    emits('change', obj.name, obj.value)
     // 更新model
-    model.value[name] = val
+    model.value[obj.name] = obj.value
   }
   onMounted(() => {
     getData()
