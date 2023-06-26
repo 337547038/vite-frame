@@ -4,10 +4,12 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import Pages from 'vite-plugin-pages'
 import * as path from 'path'
 import { routeName } from './src/utils/vitePlugins'
+import cssSprites from 'vite-plugin-sprites'
 // @ts-ignore
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    cssSprites(), // 合并雪碧图
     routeName(),
     vue(),
     vueJsx({}),

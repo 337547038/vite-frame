@@ -42,8 +42,9 @@
       v-else-if="type === 'upload'"
       v-bind="control"
       v-model:file-list="fieldValue"
-      ><el-icon><Plus /></el-icon
-    ></el-upload>
+    >
+      <el-icon><Plus /></el-icon>
+    </el-upload>
     <el-input
       v-bind="control"
       v-model="fieldValue"
