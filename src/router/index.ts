@@ -1,40 +1,8 @@
-import {
-  createRouter,
-  createWebHistory,
-  RouteRecordRaw,
-  createWebHashHistory
-} from 'vue-router'
+import { createRouter, RouteRecordRaw, createWebHashHistory } from 'vue-router'
 // @ts-ignore
 import routesPage from '~pages'
 
 console.log(routesPage)
-
-//import {routesPage} from './routePages'
-/*const routesPage = () => {
-  const moduleFilesTs = import.meta.glob('../views/!**!/!*.vue')
-  const pages: any = []
-  Object.keys(moduleFilesTs).forEach((key: string) => {
-    const name = key
-      .replace('../views/', '')
-      .replace('index.vue', '')
-      .replace('.vue', '')
-    pages.push({
-      component: moduleFilesTs[key],
-      name: name.replace(/\//g, '-') || 'index',
-      path: '/' + name,
-      meta: {}
-    })
-  })
-  console.log(pages)
-  return pages
-}*/
-/* 动态路由
-import {useRouter} from "vue-router";
-let router = useRouter();
-router.addRoute(  {
-  path: "/vip",
-  component: () => import("../views/VipPage.vue")
-})*/
 const routes: Array<RouteRecordRaw> = [
   /*{
     path: '/',
@@ -65,17 +33,18 @@ const router = createRouter({
   routes: routes
 })
 
-router.beforeEach((to, from) => {
-  /*const { path: toPath } = to
+router.afterEach((to: any) => {
+  /*  const { path: toPath } = to
   const { path: fromPath } = from
   if (toPath === fromPath) {
     return false
   }*/
-  /*if (to.meta.title) {
+  if (to.meta.title) {
+    // @ts-ignore
     document.title = to.meta.title
-  }else {
+  } else {
     document.title = 'to.meta.title'
-  }*/
+  }
 })
 
 export default router

@@ -1,46 +1,47 @@
-const { defineConfig } = require("eslint-define-config");
-module.exports = defineConfig({
+module.exports = {
   root: true,
-  env: {
-    browser: true,
-    node: true,
-    es6: true,
-  },
-  parser: "vue-eslint-parser",
-  parserOptions: {
-    parser: "@typescript-eslint/parser",
-    ecmaVersion: 2020,
-    sourceType: "module",
-    jsxPragma: "React",
-    ecmaFeatures: {
-      jsx: true,
-    },
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
   },
   extends: [
-    "plugin:vue/vue3-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "plugin:prettier/recommended",
-    // 'plugin:jest/recommended'
+    'plugin:vue/recommended', // 启用Vue相关规则
+    'plugin:vue/vue3-essential',
+    'eslint:recommended',
+    '@vue/typescript/recommended',
+    'prettier',
+    'plugin:prettier/recommended'
   ],
-  plugins: ["prettier", "import", "@typescript-eslint"],
-  rules: {
-    "prettier/prettier": [
-      "error",
-      {
-        printWidth: 80,
-        semi: false,
-        vueIndentScriptAndStyle: true,
-        singleQuote: true,
-        trailingComma: "all",
-        proseWrap: "never",
-        htmlWhitespaceSensitivity: "strict",
-        endOfLine: "auto",
-        stylelintIntegration: true,
-        eslintIntegration: true,
-        trailingComma: "none",
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "parser": "@typescript-eslint/parser"
+  },
+  "plugins": [
+    "prettier",
+    "vue",
+    "@typescript-eslint"
+  ],
+  overrides: [
+    {
+      files: ['*.vue'],
+      rules: {
+        indent: 'off',
       },
-    ],
+    },
+  ],
+  globals: {
+    ace: true,
+    tinymce: true,
+    AMap: true,
+    echarts: true
+  },
+  rules: {
+    "prettier/prettier": ["error", {
+      vueIndentScriptAndStyle: true
+    }],
     "vue/script-setup-uses-vars": "error",
     "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
@@ -92,5 +93,9 @@ module.exports = defineConfig({
       },
     ],
     "vue/multi-word-component-names": "off",
-  },
-});
+    "vue/no-v-html": "off",
+    "vue/no-multiple-template-root":"off",
+    "vue/no-v-model-argument": 0,
+    'vue/no-v-for-template-key': 'off'
+  }
+}

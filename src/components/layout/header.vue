@@ -4,11 +4,11 @@
     <Expand v-else />
   </el-icon>
   <el-breadcrumb separator="/" class="breadcrumb">
-    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+    <el-breadcrumb-item to="/">首页</el-breadcrumb-item>
     <el-breadcrumb-item
       v-for="(item, index) in breadcrumb"
       :key="index"
-      :to="{ path: item.path }"
+      :to="item.path"
       >{{ item.label }}</el-breadcrumb-item
     >
   </el-breadcrumb>
@@ -57,7 +57,7 @@
 <script setup lang="ts">
   import { computed, ref } from 'vue'
   import { useLayoutStore } from '@/store/layout'
-  //import { useStore } from 'vuex'
+
   withDefaults(
     defineProps<{
       collapse: boolean

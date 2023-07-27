@@ -1,14 +1,14 @@
 <template>
-  <el-form v-bind="formProps" ref="formEl" :model="model" class="comm-form">
+  <el-form ref="formEl" :model="model" class="comm-form" v-bind="formProps">
     <template v-for="(item, index) in data" :key="index">
       <template v-if="getShow(item)">
-        <div v-if="item.type === 'div'" v-bind="item.control" class="div-row">
+        <div v-if="item.type === 'div'" class="div-row" v-bind="item.control">
           <template v-for="(list, listIndex) in item.list" :key="listIndex">
             <field
-              :type="list.type"
               v-model="model[list.name]"
-              :model="model"
               :data="list"
+              :model="model"
+              :type="list.type"
               @change="changeField(list.name, $event)"
               @slot-change="slotChange"
             />
@@ -22,17 +22,16 @@
         />
         <div
           v-else-if="item.type === 'title'"
-          v-bind="item.control"
           class="form-title"
+          v-bind="item.control"
           v-html="item.title"
-        >
-        </div>
+        ></div>
         <field
           v-else
-          :type="item.type"
           v-model="model[item.name]"
-          :model="model"
           :data="item"
+          :model="model"
+          :type="item.type"
           @change="changeField(item.name, $event)"
           @slot-change="slotChange"
         />
@@ -40,7 +39,7 @@
     </template>
     <slot></slot>
     <el-form-item v-if="btnText">
-      <el-button type="primary" @click="onSubmit" v-if="btnText[0]"
+      <el-button v-if="btnText[0]" type="primary" @click="onSubmit"
         >{{ btnText[0] }}
       </el-button>
       <el-button v-if="btnText[1]" @click="onReset">{{ btnText[1] }}</el-button>
@@ -48,7 +47,7 @@
   </el-form>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
   import { ref, onMounted, provide } from 'vue'
   import Field from './field.vue'
   import Flex from './flex.vue'
@@ -56,7 +55,19 @@
 
   interface formData {
     name: string
-    type: string
+    type:
+      | 'input'
+      | 'cascader'
+      | 'checkbox'
+      | 'datePicker'
+      | 'inputNumber'
+      | 'select'
+      | 'switch'
+      | 'timePicker'
+      | 'timeSelect'
+      | 'upload'
+      | 'slider'
+      | 'component'
     formItem: any
     control: any
     config?: any
@@ -142,8 +153,9 @@
   }
   const onSubmit = async () => {
     if (!formEl.value) return
-    await formEl.value.validate((valid: any, fields: any) => {
-      if (valid) {
+    formEl.value
+      .validate()
+      .then(() => {
         if (props.submitApi) {
           let beforeSubmitPrams = {}
           if (props.beforeSubmit && typeof props.beforeSubmit === 'function') {
@@ -168,10 +180,10 @@
             })
         }
         emits('submit', model.value)
-      } else {
-        console.log('error submit!', fields)
-      }
-    })
+      })
+      .catch(res => {
+        console.log('error submit!', res)
+      })
   }
   const onReset = () => {
     formEl.value.resetFields()
@@ -236,7 +248,7 @@
   onMounted(() => {
     getData()
   })
-  defineExpose({ onSubmit, onReset, setValue, getValue, setOptions })
+  defineExpose({ onReset, setValue, getValue, setOptions })
 </script>
 <style lang="scss">
   .comm-form {

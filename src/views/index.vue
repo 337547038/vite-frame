@@ -1,8 +1,8 @@
 <template>
   <div class="demo-box">
     <h2>ak-form-list</h2>
-    <p
-      >二次封装表格列表及表单两个组件以满足方便使用，享受更多摸鱼时间。主要实现功能：
+    <p>
+      二次封装表格列表及表单两个组件以满足方便使用，享受更多摸鱼时间。主要实现功能：
     </p>
     <div class="box">
       <h3>使用方法：</h3>
@@ -12,8 +12,8 @@
     <div class="flex">
       <div class="col">
         <h3>ak-list</h3>
-        <p
-          >表格列表实现功能：<br />
+        <p>
+          表格列表实现功能：<br />
           1.将后端接口常见时间类型快速格式化时间，见Date列；<br />
           2.使用tag标签显示，同时使用dict字典进行数据转换，见Sex和类型列；<br />
           3.使用dict字典进行数据转换，如状态列；<br />
@@ -26,7 +26,7 @@
           10.为空时输出自定义值
         </p>
         <div>
-          <el-button @click="$router.push('/list')" type="primary"
+          <el-button type="primary" @click="$router.push('/list')"
             >查看示例
           </el-button>
         </div>
@@ -45,7 +45,7 @@
           以上功能仅需一段json代码，无需重复的el-form-item,el-input..等等
         </p>
         <div>
-          <el-button @click="$router.push('/form')" type="primary"
+          <el-button type="primary" @click="$router.push('/form')"
             >查看示例
           </el-button>
         </div>
@@ -54,9 +54,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 <style scoped>
   div,
   h3,

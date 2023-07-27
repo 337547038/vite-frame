@@ -10,19 +10,19 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(
-  (config) => {
+  config => {
     return config
   },
-  (error) => {
+  error => {
     Promise.reject(error)
   }
 )
 
 service.interceptors.response.use(
-  (response) => {
+  response => {
     return response
   },
-  (error) => {
+  error => {
     return Promise.reject(error)
   }
 )

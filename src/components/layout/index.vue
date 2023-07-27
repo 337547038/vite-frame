@@ -5,10 +5,10 @@
       class="common-sidebar"
       v-if="!fullScreen"
     >
-      <div class="logo"
-        ><img src="@/assets/logo.png" />
-        <span v-show="!isCollapse">XX管理系统</span></div
-      >
+      <div class="logo">
+        <img src="@/assets/logo.png" />
+        <span v-show="!isCollapse">XX管理系统</span>
+      </div>
       <Menu :collapse="isCollapse" @get-menu-list="getMenuList" />
     </el-aside>
     <el-container class="common-container">
@@ -42,9 +42,9 @@
   import Menu from './menu.vue'
   import CommonHeader from './header.vue'
   const store = useLayoutStore()
-  const isCollapse = ref<boolean>(false)
-  const fullScreen = ref<boolean>(false)
-  const reloadFlag = ref<boolean>(true)
+  const isCollapse = ref(false)
+  const fullScreen = ref(false)
+  const reloadFlag = ref(true)
   const navList = ref([])
   const headClick = (type: string) => {
     if (type === 'collapse') {

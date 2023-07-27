@@ -1,31 +1,33 @@
 <template>
-  <div v-bind="data.control" class="form-flex">
-    <template v-for="(flex, listIndex) in flexData" :key="listIndex">
-      <div class="form-flex-row">
-        <div class="row">
-          <template v-for="(list, i) in data.list" :key="i">
-            <field
-              :type="list.type"
-              v-model="flex[list.name]"
-              :prop="`${data.name}.${i}.${list.name}`"
-              :data="list"
-              :model="flexData[i]"
-              @change="changeField(list.name, $event)"
-              @slot-change="slotChange($event, i)"
-            />
-          </template>
-        </div>
-        <el-button
-          size="small"
-          class="flex-del-btn"
-          @click="deleteRow(listIndex)"
-          v-if="data.config?.del"
-        >
-          {{ data.config.del }}
-        </el-button>
+  <div class="form-flex" v-bind="data.control">
+    <div
+      v-for="(flex, listIndex) in flexData"
+      :key="listIndex"
+      class="form-flex-row"
+    >
+      <div class="row">
+        <template v-for="(list, i) in data.list" :key="i">
+          <field
+            v-model="flex[list.name]"
+            :data="list"
+            :model="flexData[i]"
+            :prop="`${data.name}.${i}.${list.name}`"
+            :type="list.type"
+            @change="changeField(list.name, $event)"
+            @slot-change="slotChange($event, i)"
+          />
+        </template>
       </div>
-    </template>
-    <div class="flex-add-btn" v-if="data.config?.add">
+      <el-button
+        v-if="data.config?.del"
+        class="flex-del-btn"
+        size="small"
+        @click="deleteRow(listIndex)"
+      >
+        {{ data.config.del }}
+      </el-button>
+    </div>
+    <div v-if="data.config?.add" class="flex-add-btn">
       <el-button size="small" @click="addRow">
         {{ data.config.add }}
       </el-button>
@@ -33,9 +35,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
   import { watch, onMounted, toRef } from 'vue'
   import Field from './field.vue'
+
   const props = withDefaults(
     defineProps<{
       data: any
@@ -69,7 +72,7 @@
     flexData.value.push(getRow())
   }
   const getRow = () => {
-    let temp: any = {}
+    const temp: any = {}
     props.data.list.forEach((item: any) => {
       temp[item.name] = item.control.modelValue
       if (item.config && item.type === 'input') {

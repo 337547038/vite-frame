@@ -279,7 +279,7 @@
   const setOptionsValue = inject('setOptions', {}) as any
   watch(
     () => setOptionsValue.value,
-    (val) => {
+    val => {
       if (config.value.optionsKey === false) {
         return
       }
