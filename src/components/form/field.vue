@@ -1,35 +1,35 @@
 <template>
-  <el-form-item v-bind="formItem" :rules="rules" customRules="" :prop="prop">
+  <el-form-item v-bind="formItem" :prop="prop" :rules="rules" customRules="">
     <el-checkbox-group
       v-bind="control"
-      v-model="fieldValue"
       v-if="type === 'checkbox'"
+      v-model="fieldValue"
     >
       <el-checkbox
         v-bind="item"
         v-for="(item, index) in options"
         :key="index"
         :label="item.value || item.label"
-        >{{ item.label }}</el-checkbox
-      >
+        >{{ item.label }}
+      </el-checkbox>
     </el-checkbox-group>
     <el-radio-group
       v-bind="control"
-      v-model="fieldValue"
       v-else-if="type === 'radio'"
+      v-model="fieldValue"
     >
       <el-radio
         v-bind="control"
         v-for="(item, index) in options"
         :key="index"
         :label="item.value"
-        >{{ item.label }}</el-radio
-      >
+        >{{ item.label }}
+      </el-radio>
     </el-radio-group>
     <el-select
       v-bind="control"
-      v-model="fieldValue"
       v-else-if="type === 'select'"
+      v-model="fieldValue"
     >
       <el-option
         v-for="(item, index) in options"
@@ -39,61 +39,63 @@
       />
     </el-select>
     <el-upload
-      v-else-if="type === 'upload'"
       v-bind="control"
+      v-else-if="type === 'upload'"
       v-model:file-list="fieldValue"
     >
-      <el-icon><Plus /></el-icon>
+      <el-icon>
+        <Plus />
+      </el-icon>
     </el-upload>
     <el-input
       v-bind="control"
-      v-model="fieldValue"
       v-else-if="type === 'input'"
+      v-model="fieldValue"
     >
-      <template #prepend v-if="typeof config.prepend === 'string'">
+      <template v-if="typeof config.prepend === 'string'" #prepend>
         {{ config.prepend }}
       </template>
-      <template #prepend v-else-if="typeof config.prepend === 'object'">
+      <template v-else-if="typeof config.prepend === 'object'" #prepend>
         <el-select
           v-model="prependValue"
           :placeholder="config.placeholder"
-          @change="slotSelectChange(config.prepend.name, $event)"
           :style="config.prepend.style"
+          @change="slotSelectChange(config.prepend.name, $event)"
         >
           <el-option
             v-for="item in prependOptions"
+            :key="item.value"
             :label="item.label"
             :value="item.value"
-            :key="item.value"
           />
         </el-select>
       </template>
-      <template #append v-if="typeof config.append === 'string'">
+      <template v-if="typeof config.append === 'string'" #append>
         {{ config.append }}
       </template>
-      <template #append v-else-if="typeof config.append === 'object'">
+      <template v-else-if="typeof config.append === 'object'" #append>
         <el-select
           v-model="appendValue"
           :placeholder="config.placeholder"
-          @change="slotSelectChange(config.append.name, $event)"
           :style="config.append.style"
+          @change="slotSelectChange(config.append.name, $event)"
         >
           <el-option
             v-for="item in appendOptions"
+            :key="item.value"
             :label="item.label"
             :value="item.value"
-            :key="item.value"
           />
         </el-select>
       </template>
-      <template #suffix v-if="config.suffix">{{ config.suffix }}</template>
-      <template #prefix v-if="config.prefix">{{ config.prefix }}</template>
+      <template v-if="config.suffix" #suffix>{{ config.suffix }}</template>
+      <template v-if="config.prefix" #prefix>{{ config.prefix }}</template>
     </el-input>
     <component
       :is="currentComponent"
       v-bind="control"
-      v-model="fieldValue"
       v-else
+      v-model="fieldValue"
     />
   </el-form-item>
 </template>
@@ -102,6 +104,7 @@
   import { ref, computed, watch, onMounted, inject } from 'vue'
   import validate from './validate'
   import axios from '@/utils/request'
+
   const props = withDefaults(
     defineProps<{
       data: any
@@ -196,14 +199,14 @@
           case 'required':
             obj = {
               required: true,
-              message: rules.message,
+              message: item.message || rules.message,
               trigger: item.trigger || 'blur'
             }
             break
           default:
             obj = {
               pattern: rules.regExp,
-              message: rules.message,
+              message: item.message || rules.message,
               trigger: item.trigger || 'blur'
             }
             break

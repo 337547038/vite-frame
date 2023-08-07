@@ -13,6 +13,7 @@ declare module 'virtual:generated-pages' {
 }
 declare module 'vue'
 declare module 'vue-router'
+declare module 'axios'
 /*declare module 'vue' {
   export function withDefaults<T>(component: T): T
 

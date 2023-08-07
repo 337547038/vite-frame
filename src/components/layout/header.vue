@@ -1,33 +1,33 @@
 <template>
-  <el-icon @click="toolClick('collapse')" class="collapse-icon">
+  <el-icon class="collapse-icon" @click="toolClick('collapse')">
     <Fold v-if="!collapse" />
     <Expand v-else />
   </el-icon>
-  <el-breadcrumb separator="/" class="breadcrumb">
+  <el-breadcrumb class="breadcrumb" separator="/">
     <el-breadcrumb-item to="/">首页</el-breadcrumb-item>
     <el-breadcrumb-item
-      v-for="(item, index) in breadcrumb"
       :key="index"
+      v-for="(item, index) in breadcrumb"
       :to="item.path"
-      >{{ item.label }}</el-breadcrumb-item
-    >
+      >{{ item.label }}
+    </el-breadcrumb-item>
   </el-breadcrumb>
   <div class="comm-header-tool">
-    <el-icon @click="toolClick('refresh')" title="刷新页面"
-      ><RefreshRight
-    /></el-icon>
-    <el-icon title="全屏"
-      ><FullScreen @click="toolClick('fullScreen')"
-    /></el-icon>
+    <el-icon title="刷新页面" @click="toolClick('refresh')">
+      <RefreshRight />
+    </el-icon>
+    <el-icon title="全屏">
+      <FullScreen @click="toolClick('fullScreen')" />
+    </el-icon>
   </div>
   <div class="header-right">
     <el-dropdown>
       <div class="header-avatar" style="cursor: pointer">
         <el-avatar
-          class="avatar"
-          size="small"
-          shape="circle"
           :src="user.avatar"
+          class="avatar"
+          shape="circle"
+          size="small"
         />
         <span class="name">{{ user.name }}</span>
         <el-icon class="el-icon--right">
@@ -37,15 +37,21 @@
       <template #dropdown>
         <el-menu class="avatar-menu">
           <el-menu-item>
-            <el-icon><User /></el-icon>
+            <el-icon>
+              <User />
+            </el-icon>
             <span class="title">个人中心</span>
           </el-menu-item>
           <el-menu-item>
-            <el-icon><Setting /></el-icon>
+            <el-icon>
+              <Setting />
+            </el-icon>
             <span class="title">设置</span>
           </el-menu-item>
           <el-menu-item @click="logout">
-            <el-icon><CircleClose /></el-icon>
+            <el-icon>
+              <CircleClose />
+            </el-icon>
             <span class="title">退出登录</span>
           </el-menu-item>
         </el-menu>
@@ -54,7 +60,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
   import { computed, ref } from 'vue'
   import { useLayoutStore } from '@/store/layout'
 
@@ -84,8 +90,8 @@
 </script>
 <style lang="scss">
   .header-avatar {
-    display: flex;
     align-items: center;
+    display: flex;
     .avatar,
     .name {
       align-self: center;
@@ -97,6 +103,7 @@
       font-weight: 500;
     }
   }
+
   .avatar-menu {
     width: 150px;
     .title {

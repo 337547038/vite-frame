@@ -9,7 +9,6 @@
 | formProps     | el表单组件props参数                       |
 | beforeSubmit  | 表单提交前方法，仅在submitApi为真时，返回false时取消请求 |
 | afterSubmit   | 表单提交后方法，仅在submitApi为真时              |
-| btnText       | 表单提交按钮文案，默认['确定', '取消']，设为false不显示  |
 | getApi        | 表单获取数据接口api，当表单存在修改时，可使用此参数请求接口     |
 | beforeRequest | 获取数据提交前方法，仅在getApi为真时，返回false时取消请求  |
 | afterResponse | 获取数据提交后方法，仅在getApi为真时               |
@@ -19,28 +18,29 @@
 
 | 事件名    | 说明                            |
 |--------|-------------------------------|
-| submit | 表单提交事件，在验证通过后返回当前表单的值         |
-| cancel | 表单取消事件，会执行表单重置方法              |
 | change | 表单组件改变事件,function(name,value) |
 
 ## Form Method
 
-| 事件名        | 说明        |
-|------------|-----------|
-| setValue   | 用于设置初始值   |
-| getValue   | 用于获取表单当前值 |
-| setOptions | 用于设置下拉项   |
+| 事件名        | 说明                                |
+|------------|-----------------------------------|
+| setValue   | 用于设置初始值                           |
+| getValue   | 用于获取表单当前值                         |
+| setOptions | 用于设置下拉项                           |
+| getData    | 用于获取初始数据,function(data) data请求的参数 |
+| onSubmit   | 用于提交表单                            |
+| onReset    | 用于重置表单                            |
 
 ## Form data
 
-| 参数         | 说明                                                                                                                           |
-|------------|------------------------------------------------------------------------------------------------------------------------------|
-| type       | 组件类型，支持`input、cascader、checkbox、datePicker、inputNumber、select、switch、timePicker、timeSelect、upload、slider、component、div、flex` |
-| formItem   | 表单formItem组件相关参数                                                                                                             |
-| control    | 对应type类型的组件所有参数                                                                                                              |
-| modelValue | 当前表单值                                                                                                                        |
-| component  | import的组件，仅在`type=component`时                                                                                                |
-| config     | 其他一些配置信息                                                                                                                     |
+| 参数         | 说明                                                                                                                                  |
+|------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| type       | 组件类型，支持`input、cascader、checkbox、datePicker、inputNumber、select、switch、timePicker、timeSelect、upload、slider、component、div、flex、button` |
+| formItem   | 表单formItem组件相关参数                                                                                                                    |
+| control    | 对应type类型的组件所有参数                                                                                                                     |
+| modelValue | 当前表单值                                                                                                                               |
+| component  | import的组件，仅在`type=component`时                                                                                                       |
+| config     | 其他一些配置信息                                                                                                                            |
 
 ## data.customRules校验
 | 类型      | 说明                                                                                          |
@@ -367,6 +367,25 @@
         suffix:'suffix', // 输入框头部内容，仅支持字符串文本
         prefix:'prefix' // 输入框尾部内容，仅支持字符串文本
       }
+    },
+    {
+      type: 'button',
+      list: [
+        {
+          type: 'primary',
+          label: '提交',
+          key: 'submit',
+          click: () => {
+            console.log('click')
+            // return false // 可阻止内部表单提交
+          }
+        },
+        {
+          type: '',
+          label: '取消',
+          key: 'cancel'
+        }
+      ]
     }
   ])
 </script>

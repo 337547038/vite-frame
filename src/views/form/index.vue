@@ -14,30 +14,31 @@
   </el-alert>
   <p></p>
   <ak-form
+    ref="autoFormEl"
+    :beforeSubmit="beforeSubmit"
     :data="data"
     :formProps="formProps"
-    @submit="submit"
-    submitApi="formSubmit"
-    :beforeSubmit="beforeSubmit"
-    @change="change"
     getApi="getFormContent"
-    ref="autoFormEl"
+    submitApi="formSubmit"
+    @change="change"
   />
   <el-button @click="setValue">setValue</el-button>
   <el-button @click="setOptions">setOptions</el-button>
 </template>
 <route>
 {
-name:'Form'
+name:'FormTest'
 }
 </route>
-<script lang="ts" setup name="Form">
-  import { ref, markRaw } from 'vue'
+<script lang="ts" name="Form" setup>
+  import { ref, markRaw, onMounted } from 'vue'
   import TestCom from './test.vue'
+
+  const autoFormEl = ref()
   const data = ref([
     {
       type: 'input',
-      name: 'text',
+      name: 'text0',
       formItem: {
         // formItem参数
         label: '用户名'
@@ -110,7 +111,8 @@ name:'Form'
             trigger: 'blur'
           },
           {
-            type: 'phone'
+            type: 'phone',
+            message: '请填写手机号'
           }
         ]
       },
@@ -340,6 +342,52 @@ name:'Form'
           defaultValue: '0' // 初始选中值
         }
       }
+    },
+    {
+      type: 'button',
+      list: [
+        {
+          type: 'primary',
+          label: '提交',
+          key: 'submit',
+          click: () => {
+            console.log('click')
+            // return false // 可阻止内部表单提交
+          }
+        },
+        {
+          type: '',
+          label: '取消',
+          key: 'cancel'
+        }
+      ]
+    },
+    {
+      type: 'collapse',
+      value: 1,
+      list: [
+        {
+          title: '分组一',
+          list: [
+            {
+              type: 'input',
+              name: 'collapseText',
+              formItem: {
+                label: '用户名'
+              },
+              control: {
+                // 当前控件参数
+                modelValue: '12',
+                placeholder: '请输入'
+              }
+            }
+          ]
+        },
+        {
+          title: '分组二',
+          list: []
+        }
+      ]
     }
   ])
   const formProps = ref({
@@ -354,16 +402,12 @@ name:'Form'
       ]
     }
   })
-  const submit = (obj: any) => {
-    console.log(obj)
-  }
   // 表单提交前方法，这里返回的参数将会合并提交
   const beforeSubmit = () => {
     return {
       id: 'id12121'
     }
   }
-  const autoFormEl = ref()
   // 设置值
   const setValue = () => {
     autoFormEl.value.setValue({
@@ -387,8 +431,11 @@ name:'Form'
   }
   // 组件值改变事件
   const change = (name: string, value: any) => {
-    // console.log(name, value)
+    console.log(name, value)
   }
+  onMounted(() => {
+    autoFormEl.value.getData()
+  })
 </script>
 <style lang="scss">
   .div-row {

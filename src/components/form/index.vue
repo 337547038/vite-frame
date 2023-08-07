@@ -26,6 +26,21 @@
           v-bind="item.control"
           v-html="item.title"
         ></div>
+        <el-form-item v-else-if="item.type === 'button'">
+          <el-button
+            v-for="(btn, bI) in item.list"
+            :key="bI"
+            v-bind="btn"
+            @click="btnClick(btn)"
+            >{{ btn.label }}</el-button
+          >
+        </el-form-item>
+        <collapse
+          v-else-if="item.type === 'collapse'"
+          :data="item"
+          :model="model"
+          @change="changeField"
+        />
         <field
           v-else
           v-model="model[item.name]"
@@ -38,20 +53,16 @@
       </template>
     </template>
     <slot></slot>
-    <el-form-item v-if="btnText">
-      <el-button v-if="btnText[0]" type="primary" @click="onSubmit"
-        >{{ btnText[0] }}
-      </el-button>
-      <el-button v-if="btnText[1]" @click="onReset">{{ btnText[1] }}</el-button>
-    </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts" setup>
   import { ref, onMounted, provide } from 'vue'
   import Field from './field.vue'
+  import Collapse from './collapse.vue'
   import Flex from './flex.vue'
   import { getRequest } from '@/api'
+  import { ElMessage } from 'element-plus'
 
   interface formData {
     name: string
@@ -83,7 +94,6 @@
       formProps?: any // el表单组件props参数
       beforeSubmit?: Function // 表单提交前
       afterSubmit?: Function // 表单提交后
-      btnText?: string[] | boolean // 按钮文案
       submitApi?: string // 表单提交接口api
       getApi?: string // 获取接口数据方法
       beforeRequest?: Function
@@ -94,17 +104,16 @@
       data: () => {
         return []
       },
-      btnText: () => ['确定', '取消'],
       hideField: () => {
         return []
       }
     }
   )
   const emits = defineEmits<{
-    (e: 'update:modelValue', value: any): void
+    //(e: 'update:modelValue', value: any): void
     (e: 'change', name: string, value: any): void
-    (e: 'submit', value: any): void
-    (e: 'cancel'): void
+    //(e: 'submit', value: any): void
+    //(e: 'cancel'): void
   }>()
   const model = ref<any>({})
   const getModelValue = (data: formData[]) => {
@@ -127,6 +136,11 @@
       }
       if (item.type === 'flex') {
         model.value[item.name] = item.flexData
+      }
+      if (item.type === 'collapse') {
+        item.list.forEach((item: any) => {
+          getModelValue(item.list)
+        })
       }
     })
   }
@@ -157,29 +171,44 @@
       .validate()
       .then(() => {
         if (props.submitApi) {
-          let beforeSubmitPrams = {}
+          let beforeSubmitParams = {}
           if (props.beforeSubmit && typeof props.beforeSubmit === 'function') {
-            beforeSubmitPrams = props.beforeSubmit(model.value)
+            beforeSubmitParams = props.beforeSubmit(model.value)
           }
-          if (beforeSubmitPrams === false) {
+          if (beforeSubmitParams === false) {
             return
           }
-          const prams = Object.assign({}, model.value, beforeSubmitPrams || {})
+          const prams = Object.assign({}, model.value, beforeSubmitParams || {})
+          let after
           getRequest(props.submitApi, prams)
             .then((res: any) => {
               if (typeof props.afterSubmit === 'function') {
-                props.afterSubmit(res)
+                after = props.afterSubmit(res)
+              }
+              if (after === false) {
+                return
               }
               // 这里作全局提交结果处理
+              ElMessage({
+                message: res.data.message,
+                type: 'success'
+              })
             })
             .catch((res: any) => {
               if (typeof props.afterSubmit === 'function') {
                 props.afterSubmit(res, 'catch')
               }
+              if (after === false) {
+                return
+              }
+              ElMessage({
+                message: res.data.message,
+                type: 'error'
+              })
               // 这里作全局异常提示处理
             })
         }
-        emits('submit', model.value)
+        //emits('submit', model.value)
       })
       .catch(res => {
         console.log('error submit!', res)
@@ -187,7 +216,7 @@
   }
   const onReset = () => {
     formEl.value.resetFields()
-    emits('cancel')
+    //emits('cancel')
   }
   // 设置初始值
   const setValue = (obj: any) => {
@@ -206,18 +235,18 @@
     emits('change', name, val)
   }
   // 修改表单时，加载初始数据
-  const getData = () => {
+  const getData = (data = {}) => {
     if (props.getApi) {
-      let beforeRequestPrams = {}
+      let beforeRequestParams = {}
       if (props.beforeRequest && typeof props.beforeRequest === 'function') {
-        beforeRequestPrams = props.beforeRequest()
+        beforeRequestParams = props.beforeRequest()
       }
-      if (beforeRequestPrams === false) {
+      if (beforeRequestParams === false) {
         return
       }
-      const data = {} // 一些请求的参数
-      const prams = Object.assign({}, data, beforeRequestPrams || {})
-      getRequest(props.getApi, prams)
+      // const data = {} // 一些请求的参数
+      const params = Object.assign({}, data, beforeRequestParams || {})
+      getRequest(props.getApi, params)
         .then((res: any) => {
           let result = res.data
           if (
@@ -245,10 +274,26 @@
     // 更新model
     model.value[obj.name] = obj.value
   }
+
+  // 表单内置按钮事件
+  const btnClick = (btn: any) => {
+    if (btn.click) {
+      if (btn.click() === false) {
+        return // 阻止提交
+      }
+    }
+    if (btn.key === 'submit') {
+      // 提交表单
+      onSubmit()
+    } else if (btn.key === 'cancel') {
+      // 重置表单
+      onReset()
+    }
+  }
   onMounted(() => {
-    getData()
+    //getData()
   })
-  defineExpose({ onReset, setValue, getValue, setOptions })
+  defineExpose({ onSubmit, onReset, setValue, getValue, setOptions, getData })
 </script>
 <style lang="scss">
   .comm-form {
