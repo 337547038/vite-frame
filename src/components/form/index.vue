@@ -63,34 +63,11 @@
   import Flex from './flex.vue'
   import { getRequest } from '@/api'
   import { ElMessage } from 'element-plus'
-
-  interface formData {
-    name: string
-    type:
-      | 'input'
-      | 'cascader'
-      | 'checkbox'
-      | 'datePicker'
-      | 'inputNumber'
-      | 'select'
-      | 'switch'
-      | 'timePicker'
-      | 'timeSelect'
-      | 'upload'
-      | 'slider'
-      | 'component'
-    formItem: any
-    control: any
-    config?: any
-    list?: any
-    component?: any
-    flexData?: any
-    title?: any
-  }
+  import type { FormData } from '../types'
 
   const props = withDefaults(
     defineProps<{
-      data?: formData[] // 表单项数据
+      data?: FormData[] // 表单项数据
       formProps?: any // el表单组件props参数
       beforeSubmit?: Function // 表单提交前
       afterSubmit?: Function // 表单提交后
@@ -116,8 +93,8 @@
     //(e: 'cancel'): void
   }>()
   const model = ref<any>({})
-  const getModelValue = (data: formData[]) => {
-    data.forEach((item: formData) => {
+  const getModelValue = (data: FormData[]) => {
+    data.forEach((item: FormData) => {
       if (item.name) {
         model.value[item.name] = item.control?.modelValue
       }
@@ -146,7 +123,7 @@
   }
   getModelValue(props.data)
   const formEl = ref()
-  const getShow = (data: formData) => {
+  const getShow = (data: FormData) => {
     if (props.hideField.includes(data.name)) {
       return false // 不显示
     }
@@ -219,8 +196,16 @@
     //emits('cancel')
   }
   // 设置初始值
-  const setValue = (obj: any) => {
-    model.value = { ...model.value, ...obj }
+  const setValue = (obj: any, filter = true) => {
+    if (filter) {
+      for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(model.value, key)) {
+          model.value[key] = obj[key]
+        }
+      }
+    } else {
+      model.value = Object.assign({}, model.value, obj || {})
+    }
   }
   const getValue = () => {
     return model.value
@@ -277,11 +262,11 @@
 
   // 表单内置按钮事件
   const btnClick = (btn: any) => {
-    if (btn.click) {
+    /*if (btn.click) {
       if (btn.click() === false) {
         return // 阻止提交
       }
-    }
+    }*/
     if (btn.key === 'submit') {
       // 提交表单
       onSubmit()
@@ -289,6 +274,7 @@
       // 重置表单
       onReset()
     }
+    btn.click && btn.click(model.value)
   }
   onMounted(() => {
     //getData()

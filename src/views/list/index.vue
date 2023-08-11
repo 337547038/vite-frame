@@ -15,19 +15,19 @@
     </el-alert>
     <p></p>
     <ak-list
-      :columns="columns"
-      :searchData="searchData"
-      :formConfig="formConfig"
-      apiKey="tableList"
-      :beforeRequest="beforeRequest"
-      :afterResponse="afterResponse"
-      :dict="{ type1: { 1: '类型11', 2: '类型21', 3: '类型31' } }"
       ref="listEl"
+      :afterResponse="afterResponse"
+      :beforeRequest="beforeRequest"
+      :columns="columns"
       :controlBtn="controlBtn"
+      :dict="{ type1: { 1: '类型11', 2: '类型21', 3: '类型31' } }"
+      :searchData="searchData"
+      apiKey="tableList"
       @control-btn-click="getSelection"
+      :searchJump="true"
     >
       <template #control="scope">
-        <el-button>删除{{ scope.row.name }}</el-button>
+        <el-button>编辑{{ scope.row.name }}</el-button>
       </template>
     </ak-list>
   </div>
@@ -37,14 +37,10 @@
 name:'List01'
 }
 </route>
-<script lang="tsx" setup name="List01">
+<script lang="tsx" name="List01" setup>
   import { ref } from 'vue'
 
   const listEl = ref()
-  const formConfig = ref({
-    btnText: ['查询', '清空'],
-    formProps: { inline: true }
-  })
   const columns = ref([
     {
       type: 'selection',
@@ -83,6 +79,14 @@ name:'List01'
       label: '类型',
       tag: { 1: 'info', 2: 'success', 3: 'danger' },
       dict: 'type', // 从全局dict里取type
+      width: 150,
+      placeholder: '/'
+    },
+    {
+      prop: 'type',
+      label: '自定类型',
+      tag: { 1: 'info', 2: 'success', 3: 'danger' },
+      dict: 'type1', // 从全局dict里取type
       width: 150,
       placeholder: '/'
     },
@@ -131,6 +135,17 @@ name:'List01'
       control: {
         options: [] // 使用接口返回的type选项数据
       }
+    },
+    {
+      type: 'select',
+      name: 'select2',
+      formItem: {
+        label: '自定dist'
+      },
+      control: {},
+      config: {
+        optionsKey: 'type1'
+      }
     }
   ])
   const controlBtn = [
@@ -148,9 +163,10 @@ name:'List01'
     },
     {
       plain: true,
-      label: '删除',
+      label: '批量删除',
       type: 'danger',
-      icon: 'delete'
+      icon: 'delete',
+      key: 'del'
     },
     {
       plain: true,
@@ -173,9 +189,12 @@ name:'List01'
     // console.log(res)
     return res // 需要return
   }
-  const getSelection = (obj: any) => {
-    const table = listEl.value.table.getSelectionRows()
-    console.log(table)
+  const getSelection = (obj: any, table: any) => {
+    // 两种方法都可以获取到表格勾选的行数据
+    const tableRow = listEl.value.table.getSelectionRows()
+    const tableRow2 = table.value.getSelectionRows()
+    console.log(tableRow)
+    console.log(tableRow2)
     console.log(obj)
   }
 </script>

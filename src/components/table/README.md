@@ -31,14 +31,17 @@
 | tableProps        | object         | 对应table组件的props参数                  |
 | columns           | array          | 表格列数据                              |
 | searchData        | array          | 条件筛选表单数据                           |
-| formConfig        | object         | 筛选表单设置，见`ak-form`                  |
+| formProps         | el表单组件props参数  |
 | apiKey            | string         | 请求接口api                            |
+| apiDelKey         | string         | 删除接口api                            |
 | beforeRequest     | function       | 请求列表数据之前方法，可对请求参数进行处理，返回false时取消请求 |
 | afterResponse     | function       | 请求到列表数据处理后返回表格列表所需数据               |
 | showPage          | boolean/true   | 是否显示分页信息                           |
 | dict              | object         | 用于匹配的字典数据，一般不设置，从接口获取并合并           |
 | fixedBottomScroll | boolean/string | 固定横向滚动条在底部,可为节点类名                  |
-| controlBtn        | array          | 控制按钮                               |
+| controlBtn        | array          | 表格上方控制按钮                           |
+| searchJump        | boolean        | 筛选表单查询点击时是否跳转页面,即使用url传参形式         |
+| showDelBtn        | boolean/true   | 表格操作栏显示删除按钮，约定操作栏`prop=control`    |
 
 ### columns 扩展
 | 参数          | 类型            | 说明                                                  |
@@ -50,15 +53,18 @@
 | placeholder | string        | 为空时显示                                               |
 
 ### Methods
-| 参数      | 说明           |
-|---------|--------------|
-| getData | 列表请求方法，可手动调用 |
-| table   | 表格所有方法集合     |
+| 参数       | 说明           |
+|----------|--------------|
+| getData  | 列表请求方法，可手动调用 |
+| table    | 表格所有方法集合     |
+| formEl   | 筛选表单所有方法集合   |
+| delClick | 通用删除方法       |
 
 ### Event
-| 参数         | 说明       |
-|------------|----------|
-| controlBtn | 控制按钮点击事件 |
+| 参数          | 说明                            |
+|-------------|-------------------------------|
+| controlBtn  | 控制按钮点击事件，约定`key='del'`时执行删除方法 |
+| delRowClick | 删除数据事件                        |
 
 
 ### Slot

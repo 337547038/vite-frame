@@ -42,7 +42,8 @@
 | component  | import的组件，仅在`type=component`时                                                                                                       |
 | config     | 其他一些配置信息                                                                                                                            |
 
-## data.customRules校验
+## data.formItem.customRules校验
+
 | 类型      | 说明                                                                                          |
 |---------|---------------------------------------------------------------------------------------------|
 | type    | 自定义的校验类型，支持`required,mobile,tel,phone,email,int,number,money,card,cn,url`。详情`./validate.ts` |
@@ -50,7 +51,8 @@
 | trigger | 触发类型，默认blur                                                                                 |
 
 ## data.config
-| 类型            | 类型             | 说明                                                              |
+
+| 参数            | 类型             | 说明                                                              |
 |---------------|----------------|-----------------------------------------------------------------|
 | linkValue     | string         | 联动条件设置,`$`表示当前表单的值                                              |
 | linkResult    | string         | 联动显示结果，可选`disabled`，默认隐藏                                        |
@@ -60,15 +62,24 @@
 | params        | object         | 通过url获取数据请求参数，绝对false时不请求                                       |
 | afterResponse | function       | 请求结果方法                                                          |
 
+## Form data.type.button
+
+| 参数  | 类型     | 说明                        |
+|-----|--------|---------------------------|
+| key | string | submit/cancel 提交/重置表单内置事件 |
+| ... | ...    | button其他所有属性              |
 
 ## 示例
+
 ```vue
+
 <template>
-  <ak-form :data="data" />
+  <ak-form :data="data"/>
 </template>
 <script lang="ts" setup>
-  import { ref, markRaw } from 'vue'
+  import {ref, markRaw} from 'vue'
   import TestCom from './test.vue'
+  
   const data = ref([
     {
       type: 'input',
@@ -364,8 +375,8 @@
           placeholder: 'placeholder',
           defaultValue: '0' // 初始选中值
         },
-        suffix:'suffix', // 输入框头部内容，仅支持字符串文本
-        prefix:'prefix' // 输入框尾部内容，仅支持字符串文本
+        suffix: 'suffix', // 输入框头部内容，仅支持字符串文本
+        prefix: 'prefix' // 输入框尾部内容，仅支持字符串文本
       }
     },
     {
@@ -374,16 +385,15 @@
         {
           type: 'primary',
           label: '提交',
-          key: 'submit',
-          click: () => {
-            console.log('click')
-            // return false // 可阻止内部表单提交
+          key: 'submit', // 内置提交事件
+          click: (formValue) => {
+            console.log('click',formValue)
           }
         },
         {
           type: '',
           label: '取消',
-          key: 'cancel'
+          key: 'cancel' // 内置重置事件
         }
       ]
     }

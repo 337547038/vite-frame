@@ -104,24 +104,13 @@
   import { ref, computed, watch, onMounted, inject } from 'vue'
   import validate from './validate'
   import axios from '@/utils/request'
+  import type { Type } from '../types'
 
   const props = withDefaults(
     defineProps<{
       data: any
       model?: any // 表单所有的值
-      type?:
-        | 'input'
-        | 'cascader'
-        | 'checkbox'
-        | 'datePicker'
-        | 'inputNumber'
-        | 'select'
-        | 'switch'
-        | 'timePicker'
-        | 'timeSelect'
-        | 'upload'
-        | 'slider'
-        | 'component'
+      type?: Type
       modelValue?: any
       prop?: string
     }>(),
