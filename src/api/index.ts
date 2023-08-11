@@ -4,9 +4,9 @@ import request from '../utils/request'
 
 const api: any = {
   // tableList: '/get/table/list',
-  formSubmit: '/formSubmit',
-  tableList: 'mock/list.json',
-  getFormContent: 'mock/form.json'
+  formSubmit: './formSubmit',
+  tableList: './mock/list.json',
+  getFormContent: './mock/form.json'
 }
 export const getRequest = (apiKey: string, data?: any, options = {}) => {
   // @ts-ignore
@@ -22,7 +22,7 @@ export const getRequest = (apiKey: string, data?: any, options = {}) => {
   }
   const obj: any = Object.assign(
     {
-      url: '/' + url, // 添加个前缀
+      url: url,
       method: 'GET',
       data
     },
