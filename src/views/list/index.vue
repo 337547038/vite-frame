@@ -22,7 +22,7 @@
       :controlBtn="controlBtn"
       :dict="{ type1: { 1: '类型11', 2: '类型21', 3: '类型31' } }"
       :searchData="searchData"
-      apiKey="tableList"
+      requestUrl="tableList"
       @control-btn-click="getSelection"
       :searchJump="true"
     >

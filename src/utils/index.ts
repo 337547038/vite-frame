@@ -25,6 +25,7 @@ export const dateFormatting = (time: any, cFormat?: string) => {
     return value || 0
   })
 }
+
 // 动态远程加载script脚本
 export function loadScript(src: string) {
   return new Promise((resolve, reject) => {
@@ -47,4 +48,21 @@ export function parseToThousandth(number: number) {
 // 过滤前后空格
 export function replaceSpace(text: string) {
   return text.replace(/(^\s*)|(\s*$)/g, '') // 过滤掉前后空格
+}
+
+/**
+ * 保存localStorage
+ */
+export const setStorage = (key: string, content: any) => {
+  let stringContent = content
+  if (typeof content === 'object') {
+    stringContent = JSON.stringify(content)
+  }
+  window.localStorage.setItem(key, stringContent)
+}
+export const getStorage = (key: string) => {
+  return window.localStorage.getItem(key)
+}
+export const removeStorage = (key: string) => {
+  window.localStorage.removeItem(key)
 }

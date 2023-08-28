@@ -2,17 +2,17 @@
 
 ## Props
 
-| 参数            | 说明                                  |
-|---------------|-------------------------------------|
-| data          | 表单项数据集合                             |
-| submitApi     | 表单提交接口api，不传api时可通过submit事件提交表单     |
-| formProps     | el表单组件props参数                       |
-| beforeSubmit  | 表单提交前方法，仅在submitApi为真时，返回false时取消请求 |
-| afterSubmit   | 表单提交后方法，仅在submitApi为真时              |
-| getApi        | 表单获取数据接口api，当表单存在修改时，可使用此参数请求接口     |
-| beforeRequest | 获取数据提交前方法，仅在getApi为真时，返回false时取消请求  |
-| afterResponse | 获取数据提交后方法，仅在getApi为真时               |
-| hideField     | 需要隐藏的表单项集合                          |
+| 参数            | 说明                                     |
+|---------------|----------------------------------------|
+| data          | 表单项数据集合                                |
+| submitUrl     | 表单提交接口api，不传api时可通过submit事件提交表单        |
+| formProps     | el表单组件props参数                          |
+| beforeSubmit  | 表单提交前方法，仅在submitUrl为真时，返回false时取消请求    |
+| afterSubmit   | 表单提交后方法，仅在submitUrl为真时                 |
+| requestUrl    | 表单获取数据接口api，当表单存在修改时，可使用此参数请求接口        |
+| beforeRequest | 获取数据提交前方法，仅在requestUrl为真时，返回false时取消请求 |
+| afterResponse | 获取数据提交后方法，仅在requestUrl为真时              |
+| hideField     | 需要隐藏的表单项集合                             |
 
 ## Form Event
 
@@ -38,7 +38,6 @@
 | type       | 组件类型，支持`input、cascader、checkbox、datePicker、inputNumber、select、switch、timePicker、timeSelect、upload、slider、component、div、flex、button` |
 | formItem   | 表单formItem组件相关参数                                                                                                                    |
 | control    | 对应type类型的组件所有参数                                                                                                                     |
-| modelValue | 当前表单值                                                                                                                               |
 | component  | import的组件，仅在`type=component`时                                                                                                       |
 | config     | 其他一些配置信息                                                                                                                            |
 

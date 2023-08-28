@@ -32,8 +32,8 @@
 | columns           | array          | 表格列数据                              |
 | searchData        | array          | 条件筛选表单数据                           |
 | formProps         | el表单组件props参数  |
-| apiKey            | string         | 请求接口api                            |
-| apiDelKey         | string         | 删除接口api                            |
+| requestUrl        | string         | 请求接口api                            |
+| deleteUrl         | string         | 删除接口api                            |
 | beforeRequest     | function       | 请求列表数据之前方法，可对请求参数进行处理，返回false时取消请求 |
 | afterResponse     | function       | 请求到列表数据处理后返回表格列表所需数据               |
 | showPage          | boolean/true   | 是否显示分页信息                           |

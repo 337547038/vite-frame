@@ -18,8 +18,8 @@
     :beforeSubmit="beforeSubmit"
     :data="data"
     :formProps="formProps"
-    getApi="getFormContent"
-    submitApi="formSubmit"
+    requestUrl="getFormContent"
+    submitUrl="formSubmit"
     @change="change"
   />
   <el-button @click="setValue">setValue</el-button>
@@ -27,7 +27,10 @@
 </template>
 <route>
 {
-name:'FormTest'
+name:'FormTest',
+meta:{
+ permissions:''
+}
 }
 </route>
 <script lang="ts" name="Form" setup>

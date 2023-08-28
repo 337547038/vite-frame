@@ -6,7 +6,8 @@ const api: any = {
   // tableList: '/get/table/list',
   formSubmit: './formSubmit',
   tableList: './mock/list.json',
-  getFormContent: './mock/form.json'
+  getFormContent: './mock/form.json',
+  userLogin: './mock/login.json'
 }
 export const getRequest = (apiKey: string, data?: any, options = {}) => {
   // @ts-ignore

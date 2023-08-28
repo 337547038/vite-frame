@@ -26,7 +26,11 @@
           v-bind="item.control"
           v-html="item.title"
         ></div>
-        <el-form-item v-else-if="item.type === 'button'">
+        <div
+          v-else-if="item.type === 'button'"
+          class="form-btn"
+          v-bind="item.control"
+        >
           <el-button
             v-for="(btn, bI) in item.list"
             :key="bI"
@@ -34,7 +38,7 @@
             @click="btnClick(btn)"
             >{{ btn.label }}</el-button
           >
-        </el-form-item>
+        </div>
         <collapse
           v-else-if="item.type === 'collapse'"
           :data="item"
@@ -71,8 +75,8 @@
       formProps?: any // el表单组件props参数
       beforeSubmit?: Function // 表单提交前
       afterSubmit?: Function // 表单提交后
-      submitApi?: string // 表单提交接口api
-      getApi?: string // 获取接口数据方法
+      submitUrl?: string // 表单提交接口api
+      requestUrl?: string // 获取接口数据方法
       beforeRequest?: Function
       afterResponse?: Function
       hideField?: string[]
@@ -147,7 +151,7 @@
     formEl.value
       .validate()
       .then(() => {
-        if (props.submitApi) {
+        if (props.submitUrl) {
           let beforeSubmitParams = {}
           if (props.beforeSubmit && typeof props.beforeSubmit === 'function') {
             beforeSubmitParams = props.beforeSubmit(model.value)
@@ -157,7 +161,7 @@
           }
           const prams = Object.assign({}, model.value, beforeSubmitParams || {})
           let after
-          getRequest(props.submitApi, prams)
+          getRequest(props.submitUrl, prams)
             .then((res: any) => {
               if (typeof props.afterSubmit === 'function') {
                 after = props.afterSubmit(res)
@@ -167,7 +171,7 @@
               }
               // 这里作全局提交结果处理
               ElMessage({
-                message: res.data.message,
+                message: res.message,
                 type: 'success'
               })
             })
@@ -221,7 +225,7 @@
   }
   // 修改表单时，加载初始数据
   const getData = (data = {}) => {
-    if (props.getApi) {
+    if (props.requestUrl) {
       let beforeRequestParams = {}
       if (props.beforeRequest && typeof props.beforeRequest === 'function') {
         beforeRequestParams = props.beforeRequest()
@@ -231,7 +235,7 @@
       }
       // const data = {} // 一些请求的参数
       const params = Object.assign({}, data, beforeRequestParams || {})
-      getRequest(props.getApi, params)
+      getRequest(props.requestUrl, params)
         .then((res: any) => {
           let result = res.data
           if (
@@ -293,6 +297,9 @@
     }
     .flex-add-btn {
       margin-bottom: 18px;
+    }
+    .form-btn {
+      display: flex;
     }
   }
 </style>

@@ -123,8 +123,8 @@
       tableProps?: object // 表格相关参数
       columns: object
       searchData?: FormData[]
-      apiKey?: string
-      apiDelKey?: string
+      requestUrl?: string
+      delUrl?: string
       beforeRequest?: Function // 请求列表数据之前
       afterResponse?: Function // 请求到列表数据处理后返回表格列表所需数据
       showPage?: object | boolean
@@ -220,7 +220,7 @@
     getData()
   }
   const getData = (obj?: any) => {
-    const searchValue = formEl.value.getValue()
+    const searchValue = formEl.value?.getValue()
     let beforePrams = Object.assign({}, obj || {}, searchValue || {}, {
       pageInfo: { currentPage: state.currentPage, pageSize: state.pageSize }
     }) // 一些初始参数
@@ -233,8 +233,8 @@
       return
     }
     // 获取数据
-    if (props.apiKey) {
-      getRequest(props.apiKey, beforePrams)
+    if (props.requestUrl) {
+      getRequest(props.requestUrl, beforePrams)
         .then((res: any) => {
           let result = res.data
           if (typeof props.afterResponse === 'function') {
@@ -362,7 +362,7 @@ console.log('tableBodyDom.offsetHeight:' + tableBodyDom.offsetHeight)*/
     } else {
       params = { id: row.id }
     }
-    const delKey = props.apiDelKey
+    const delKey = props.delUrl
     if (delKey) {
       getRequest(delKey, params)
         .then((res: any) => {
