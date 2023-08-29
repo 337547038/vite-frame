@@ -2,6 +2,8 @@ import { createRouter, RouteRecordRaw, createWebHashHistory } from 'vue-router'
 // @ts-ignore
 import routesPage from '~pages'
 import { getStorage } from '@/utils'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 /**
  * meta:{
@@ -14,31 +16,11 @@ console.log(routesPage)
 const filterRoutesPage = (hidden?: boolean) => {
   if (routesPage?.length) {
     return routesPage.filter((item: any) => {
-      const { layout, permissions } = item.meta || {}
-      let has = false
-      let permissionsList = permissions || []
-      if (permissions) {
-        // 指定了权限时，
-        const menu = getStorage('_menu') || []
-        if (typeof permissions === 'string') {
-          permissionsList = [permissions]
-        }
-        for (const key in permissionsList) {
-          if (menu.includes(permissionsList[key])) {
-            has = true // 有权限
-            return
-          }
-        }
+      const { layout } = item.meta || {}
+      if (hidden) {
+        return layout === 'hidden'
       } else {
-        // 没有设置权限时，则默认为白名单
-        has = true
-      }
-      if (has) {
-        if (hidden) {
-          return layout === 'hidden'
-        } else {
-          return layout !== 'hidden'
-        }
+        return layout !== 'hidden'
       }
     })
   }
@@ -68,19 +50,27 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes: [...routes, ...filterRoutesPage(true)]
 })
-
+router.beforeEach((to, from, next) => {
+  NProgress.start()
+  const permissions: string | string[] = to.meta?.permissions
+  if (permissions) {
+    //const token: string = getStorage('token')
+    //const menuList: any = getStorage('_menu') || []
+    // 判断有没权限 todo
+    next()
+  } else {
+    // 白名单
+    next()
+  }
+})
 router.afterEach((to: any) => {
-  /*  const { path: toPath } = to
-  const { path: fromPath } = from
-  if (toPath === fromPath) {
-    return false
-  }*/
   if (to.meta.title) {
     // @ts-ignore
-    document.title = to.meta.title
+    document.title = to.meta.title + ''
   } else {
-    document.title = 'to.meta.title'
+    document.title = '管理系统'
   }
+  NProgress.done()
 })
 
 export default router

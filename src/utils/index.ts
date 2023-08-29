@@ -1,3 +1,30 @@
+export function debounce<T extends (...args: any[]) => void>(
+  func: T,
+  delay = 500,
+  immediate?: boolean
+): T {
+  let timerId: any
+
+  return function (this: any, ...args: any[]) {
+    if (timerId) {
+      clearTimeout(timerId)
+    }
+    if (immediate) {
+      const callNow = !timerId
+      timerId = setTimeout(() => {
+        timerId = null
+      }, delay)
+      if (callNow) {
+        func.apply(this, args)
+      }
+    } else {
+      timerId = setTimeout(() => {
+        func.apply(this, args)
+      }, delay)
+    }
+  } as T
+}
+
 export const dateFormatting = (time: any, cFormat?: string) => {
   const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
   // 字符串数字形式的时间戳要转换下
@@ -60,8 +87,12 @@ export const setStorage = (key: string, content: any) => {
   }
   window.localStorage.setItem(key, stringContent)
 }
-export const getStorage = (key: string) => {
-  return window.localStorage.getItem(key)
+export const getStorage = (key: string, parse?: boolean) => {
+  const val: string = window.localStorage.getItem(key) || ''
+  if (parse) {
+    return JSON.parse(val)
+  }
+  return val
 }
 export const removeStorage = (key: string) => {
   window.localStorage.removeItem(key)
