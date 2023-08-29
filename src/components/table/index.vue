@@ -1,6 +1,10 @@
 <template>
-  <div ref="el" class="table-comm">
-    <div v-if="searchData?.length" class="search-box">
+  <div ref="el" class="table-comm" v-loading="loading">
+    <div
+      v-if="searchData?.length"
+      v-show="toggleSearchVisible"
+      class="search-box"
+    >
       <SearchForm
         ref="formEl"
         :data="mergeSearchData"
@@ -8,19 +12,54 @@
       />
     </div>
     <slot name="afterSearch"></slot>
-    <div v-if="controlBtn.length" class="btn-group">
-      <el-button
-        v-bind="item"
-        v-for="(item, index) in controlBtn"
-        :key="index"
-        @click="controlBtnClick(item)"
-      >
-        {{ item.label }}
-      </el-button>
+    <div class="btn-group">
+      <div v-if="controlBtn.length" class="btn-group-left">
+        <el-button
+          v-bind="item"
+          v-for="(item, index) in controlBtn"
+          :key="index"
+          @click="controlBtnClick(item)"
+        >
+          {{ item.label }}
+        </el-button>
+      </div>
+      <div class="btn-group-right">
+        <el-button
+          v-if="searchData?.length"
+          :title="toggleSearchVisible ? '收起搜索' : '展开搜索'"
+          circle
+          icon="Search"
+          @click="toggleSearch"
+        />
+        <el-popover
+          v-if="columnsSetting"
+          :width="80"
+          placement="bottom-end"
+          trigger="click"
+          @show="popoverShowClick"
+        >
+          <template #default>
+            <el-checkbox-group v-model="state.columnsCheck">
+              <el-checkbox
+                v-for="item in columns"
+                :key="item.prop || item.type"
+                :label="item.prop || item.type"
+                >{{ item.label }}
+              </el-checkbox>
+            </el-checkbox-group>
+          </template>
+          <template #reference>
+            <el-button circle icon="SetUp" title="设置列显示隐藏" />
+          </template>
+        </el-popover>
+      </div>
     </div>
     <slot name="beforeTable"></slot>
     <el-table v-bind="tableProps" ref="table" :data="tableData" :stripe="true">
-      <template v-for="(item, index) in columns" :key="index">
+      <template
+        v-for="(item, index) in columnsFilter"
+        :key="item.prop || index"
+      >
         <el-table-column v-bind="item">
           <template v-if="item.help" #header="scope">
             {{ scope.column.label }}
@@ -40,7 +79,7 @@
               :row="scope.row"
             ></slot>
             <el-popconfirm
-              v-if="showDelBtn && item.prop === 'control'"
+              v-if="showDelBtn && item.prop === '__control'"
               cancel-button-text="取消"
               confirm-button-text="确定"
               title="确定删除访记录吗？"
@@ -64,16 +103,22 @@
           <template v-else-if="item.tag" #default="scope">
             <el-tag
               v-if="
-                scope.row[item.prop] !== '' &&
-                scope.row[item.prop] !== undefined
+                scope.row?.[item.prop] !== '' &&
+                scope.row?.[item.prop] !== undefined
               "
-              :type="item.tag[scope.row[item.prop]]"
+              :type="item.tag[scope.row?.[item.prop]]"
               >{{ getDictName(scope.row, item) }}
             </el-tag>
             <span v-else-if="item.placeholder" v-text="item.placeholder"></span>
           </template>
           <template v-else-if="item.dict || item.placeholder" #default="scope">
             {{ getDictName(scope.row, item) }}
+          </template>
+          <template
+            v-else-if="item.imgAttr && Object.keys(item.imgAttr)?.length"
+            #default="scope"
+          >
+            <img :src="scope.row?.[item.prop]" alt="" v-bind="item.imgAttr" />
           </template>
         </el-table-column>
       </template>
@@ -88,6 +133,7 @@
     >
       <el-pagination
         v-bind="pageInfo"
+        v-if="state.total > state.pageSize"
         v-model:currentPage="state.currentPage"
         :page-size="state.pageSize"
         :page-sizes="[10, 20, 30, 40] as any"
@@ -133,7 +179,8 @@
       formProps?: any // el表单组件props参数
       controlBtn?: any // 控制按钮
       searchJump?: boolean // 筛选搜索是否跳转
-      showDelBtn?: boolean // 表格操作栏显示删除，约定操作栏prop=control
+      showDelBtn?: boolean // 表格操作栏显示删除，约定操作栏prop=__control
+      columnsSetting?: boolean // 显示列表字段设置
     }>(),
     {
       tableList: () => [],
@@ -145,7 +192,8 @@
       searchData: () => {
         return []
       },
-      showDelBtn: true
+      showDelBtn: true,
+      columnsSetting: true
     }
   )
   const emits = defineEmits<{
@@ -156,6 +204,8 @@
   const el = ref()
   const formEl = ref()
   const table = ref()
+  const loading = ref(false)
+  const toggleSearchVisible = ref(false)
   // 监听路由参数发生变化时，重新请求数据
   watch(
     () => route.query,
@@ -206,9 +256,18 @@
     currentPage: 1,
     total: 0,
     pageSize: 10,
-    dict: Object.assign({}, props.dict || {})
+    dict: Object.assign({}, props.dict || {}),
+    columnsCheck: []
   })
-
+  const columnsFilter = computed(() => {
+    if (!state.columnsCheck.length) {
+      return props.columns
+    } else {
+      return props.columns.filter((item: any) => {
+        return state.columnsCheck.includes(item.prop || item.type)
+      })
+    }
+  })
   /**
    * 获取路由参数，当该参数存在于搜索表单时，则作为请求的参数
    */
@@ -232,11 +291,12 @@
       // 返回false时取消请求
       return
     }
+    loading.value = true
     // 获取数据
     if (props.requestUrl) {
       getRequest(props.requestUrl, beforePrams)
         .then((res: any) => {
-          let result = res.data
+          let result = res
           if (typeof props.afterResponse === 'function') {
             result = props.afterResponse(result) ?? result
           }
@@ -247,9 +307,11 @@
             formEl.value.setOptions(state.dict) // 搜索表单也使用同样的dict
           }
           fixedBottomScroll()
+          loading.value = false
         })
         .catch(() => {
           // 全局异常处理
+          loading.value = false
         })
     }
   }
@@ -339,15 +401,10 @@ console.log('tableBodyDom.offsetHeight:' + tableBodyDom.offsetHeight)*/
   const controlBtnClick = (obj: any) => {
     if (obj.key === 'del') {
       // 约定的删除事件
-      const selectRow = table.value.getSelectionRows()
+      const selectRow = getSelectionRows('请勾选需要删除的选项')
       if (selectRow?.length) {
         const ids = selectRow.map(obj => obj.id)
         delClick({}, ids)
-      } else {
-        ElMessage({
-          message: '请勾选需要删除的选项',
-          type: 'error'
-        })
       }
       //console.log('selectRow', selectRow)
     }
@@ -379,6 +436,37 @@ console.log('tableBodyDom.offsetHeight:' + tableBodyDom.offsetHeight)*/
         })
     }
   }
+  // 收起展开搜索
+  const toggleSearch = () => {
+    toggleSearchVisible.value = !toggleSearchVisible.value
+  }
+  /**
+   * 获取所勾选的表格，
+   * @param message 没有勾选时的提示语
+   */
+  const getSelectionRows = (message: string) => {
+    const selectRow = table.value.getSelectionRows()
+    if (selectRow?.length) {
+      return selectRow
+    } else {
+      if (message) {
+        ElMessage({
+          message: message,
+          type: 'error'
+        })
+      }
+    }
+    return []
+  }
+
+  const popoverShowClick = () => {
+    if (!state.columnsCheck?.length) {
+      // 为空时，则全部勾选上
+      props.columns.forEach((item: any) => {
+        state.columnsCheck.push(item.prop || item.type)
+      })
+    }
+  }
   onMounted(() => {
     getRouteQueryGetData()
     if (props.fixedBottomScroll) {
@@ -396,7 +484,7 @@ console.log('tableBodyDom.offsetHeight:' + tableBodyDom.offsetHeight)*/
       window.removeEventListener('resize', fixedBottomScroll)
     }
   })
-  defineExpose({ table, getData, formEl, delClick })
+  defineExpose({ table, getData, formEl, delClick, getSelectionRows })
 </script>
 <style lang="scss">
   .table-comm {
@@ -407,6 +495,9 @@ console.log('tableBodyDom.offsetHeight:' + tableBodyDom.offsetHeight)*/
     }
 
     .btn-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 10px;
     }
 

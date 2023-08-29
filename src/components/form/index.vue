@@ -1,8 +1,18 @@
 <template>
-  <el-form ref="formEl" :model="model" class="comm-form" v-bind="formProps">
+  <el-form
+    v-bind="formProps"
+    ref="formEl"
+    :class="{ ['comm-form']: true, [`form-row-${row}`]: row }"
+    :model="model"
+  >
     <template v-for="(item, index) in data" :key="index">
       <template v-if="getShow(item)">
-        <div v-if="item.type === 'div'" class="div-row" v-bind="item.control">
+        <div
+          v-bind="item.control"
+          v-if="item.type === 'div'"
+          class="div-row"
+          :style="getSpanWidth(item)"
+        >
           <template v-for="(list, listIndex) in item.list" :key="listIndex">
             <field
               v-model="model[list.name]"
@@ -16,14 +26,16 @@
         </div>
         <flex
           v-else-if="item.type === 'flex'"
+          :style="getSpanWidth(item)"
           :data="item"
           :model="model"
           @change="changeField"
         />
         <div
+          v-bind="item.control"
+          :style="getSpanWidth(item)"
           v-else-if="item.type === 'title'"
           class="form-title"
-          v-bind="item.control"
           v-html="item.title"
         ></div>
         <div
@@ -46,6 +58,7 @@
           @change="changeField"
         />
         <field
+          :style="getSpanWidth(item)"
           v-else
           v-model="model[item.name]"
           :data="item"
@@ -80,6 +93,7 @@
       beforeRequest?: Function
       afterResponse?: Function
       hideField?: string[]
+      row?: number // 排列列数
     }>(),
     {
       data: () => {
@@ -183,7 +197,7 @@
                 return
               }
               ElMessage({
-                message: res.data.message,
+                message: res.data?.message,
                 type: 'error'
               })
               // 这里作全局异常提示处理
@@ -237,7 +251,7 @@
       const params = Object.assign({}, data, beforeRequestParams || {})
       getRequest(props.requestUrl, params)
         .then((res: any) => {
-          let result = res.data
+          let result = res
           if (
             props.afterResponse &&
             typeof props.afterResponse === 'function'
@@ -280,6 +294,14 @@
     }
     btn.click && btn.click(model.value)
   }
+  // 设置列宽
+  const getSpanWidth = (item: any) => {
+    const span = item.config?.span
+    if (span) {
+      return { width: (span / 24) * 100 + '%' }
+    }
+    return {}
+  }
   onMounted(() => {
     //getData()
   })
@@ -298,8 +320,17 @@
     .flex-add-btn {
       margin-bottom: 18px;
     }
-    .form-btn {
+
+    &.form-row-2 {
       display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      > div {
+        width: 48%;
+      }
+    }
+    .el-form-item__content {
+      align-items: flex-start;
     }
   }
 </style>

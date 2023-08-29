@@ -103,7 +103,7 @@
 <script lang="ts" setup>
   import { ref, computed, watch, onMounted, inject } from 'vue'
   import validate from './validate'
-  import axios from '@/utils/request'
+  import { getRequest } from '@/api'
   import type { Type } from '../types'
 
   const props = withDefaults(
@@ -237,17 +237,21 @@
       urlParams = Object.assign({}, params, { [keyName]: props.model[key] })
     }
     const storage = window.sessionStorage.getItem(prop.value)
-    if (storage && !load) {
+    if (storage && storage !== 'undefined' && !load) {
       options.value = JSON.parse(storage)
     } else {
-      ;(axios as any)({
+      /*;(axios as any)({
         method: method,
         url: replaceUrl,
         data: urlParams,
         params: method === 'get' ? params : {}
+      })*/
+      getRequest(replaceUrl, urlParams, {
+        method: method,
+        params: method === 'get' ? params : {}
       })
         .then((res: any) => {
-          let result = res.data.data
+          let result = res.data
           if (typeof afterResponse === 'function') {
             result = afterResponse(result)
           }

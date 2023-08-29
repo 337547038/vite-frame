@@ -41,7 +41,8 @@
 | fixedBottomScroll | boolean/string | 固定横向滚动条在底部,可为节点类名                  |
 | controlBtn        | array          | 表格上方控制按钮                           |
 | searchJump        | boolean        | 筛选表单查询点击时是否跳转页面,即使用url传参形式         |
-| showDelBtn        | boolean/true   | 表格操作栏显示删除按钮，约定操作栏`prop=control`    |
+| showDelBtn        | boolean/true   | 表格操作栏显示删除按钮，约定操作栏`prop=__control`  |
+| columnsSetting    | boolean/true   | 表格上方列表字段设置按钮                       |
 
 ### columns 扩展
 | 参数          | 类型            | 说明                                                  |
@@ -84,7 +85,7 @@
       :columns="columns"
       :searchData="searchData"
     >
-      <template #control="scope">
+      <template #__control="scope">
         <el-button>删除{{ scope.row.name }}</el-button>
       </template>
     </ak-list>
@@ -98,7 +99,7 @@
       label: 'Date',
       width: 250,
       help: '可快速将接口的各种形式的时间值格式化',
-      formatTime: 'dateTime'
+      formatTime: 'dateTime' // 日期时间类型
     },
     {
       prop: 'name',
@@ -116,17 +117,18 @@
       prop: 'status',
       label: '状态',
       dict: { 1: '禁用', 2: '启用' },
-      width: 150
+      width: 150,
+      placeholder:'' // 当对应值为空或undefined时占位符
     },
     {
       prop: 'type',
       label: '类型',
       tag: { 1: 'info', 2: 'success', 3: 'danger' },
-      dict: 'type', // 从全局dict里取type
+      dict: 'type', // 从全局prop.dict里取type
       width: 150
     },
     {
-      prop: 'control',
+      prop: '__control',
       label: '操作',
       width: 250
     }

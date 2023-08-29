@@ -13,6 +13,7 @@
 | beforeRequest | 获取数据提交前方法，仅在requestUrl为真时，返回false时取消请求 |
 | afterResponse | 获取数据提交后方法，仅在requestUrl为真时              |
 | hideField     | 需要隐藏的表单项集合                             |
+| row           | 布局排列列数，即添加的样式，使用样式控制                   |
 
 ## Form Event
 

@@ -26,7 +26,7 @@
       @control-btn-click="getSelection"
       :searchJump="true"
     >
-      <template #control="scope">
+      <template #__control="scope">
         <el-button>编辑{{ scope.row.name }}</el-button>
       </template>
     </ak-list>
@@ -91,7 +91,15 @@ name:'List01'
       placeholder: '/'
     },
     {
-      prop: 'control',
+      prop: 'imgSrc',
+      label: '头像',
+      imgAttr: {
+        width: 50,
+        height: 50
+      }
+    },
+    {
+      prop: '__control',
       label: '操作',
       width: 250
     }
