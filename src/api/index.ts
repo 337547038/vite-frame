@@ -12,7 +12,7 @@ export const getRequest = (apiKey: string, data?: any, options = {}) => {
   const obj: any = Object.assign(
     {
       url: api[apiKey] || apiKey,
-      method: 'POST',
+      method: 'get',
       data
     },
     options
