@@ -1,3 +1,9 @@
+html,
+body,
+div {
+  margin: 0;
+  padding: 0;
+}
 @mixin scrollColor($color) {
   &::-webkit-scrollbar {
     width: 8px;
@@ -92,9 +98,6 @@
     .clear-tag {cursor: pointer}
   }
   .quit-full{position: fixed;right: 10px;top:10px;cursor: pointer}
-}
-.comm-form{
-  .form-btn{display: flex}
 }
 /*.el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;

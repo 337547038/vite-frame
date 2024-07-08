@@ -1,7 +1,7 @@
 <!--貌似这closable组件有问题，不能对指定项设置不显示关闭-->
 <template>
   <div class="tag-tabs">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-change="handleClick">
       <el-tab-pane label="首页" name="/" />
       <el-tab-pane
         v-for="(item, index) in tabsViews"
@@ -84,8 +84,6 @@
   }
 
   const setTabViews = () => {
-    /*console.log('route')
-    console.log(route.name)*/
     // 当前组件不需要缓存
     if (route.meta?.keepAlive === false) {
       activeName.value = '' // 清空选中状态

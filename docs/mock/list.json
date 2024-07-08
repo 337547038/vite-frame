@@ -10,76 +10,76 @@
   },
   "list": [
     {
+      "id": 1,
       "name": "张三",
       "status": 1,
       "sex": 0,
       "type": 1,
       "date": "2022-01-02",
-      "imgSrc": "/face.jpg"
+      "src": ["/img.jpeg","https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"]
     },
-    {
+    {"id": 2,
       "name": "李四",
       "status": 2,
       "sex": 1,
       "type": 1,
       "date": 1592751467000,
-      "imgSrc": "/face.jpg"
+      "src": "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
     },
     {
+      "id": 3,
       "name": "张三",
       "status": 1,
       "sex": 0,
       "type": 2,
       "date": "2019-01-29T16:00:00.000+0000",
-      "imgSrc": "/face.jpg"
+      "src": "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
     },
     {
+      "id": 4,
       "name": "李四",
       "status": 2,
       "sex": 1,
       "type": 3,
       "date": "1592751467000",
-      "imgSrc": "/face.jpg"
+      "src": "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
     },
     {
+      "id": 5,
       "name": "张三",
       "status": 1,
       "sex": 0,
       "type": 2,
       "date": "2022-01-02",
-      "imgSrc": "/face.jpg"
+      "src": "/img.jpeg"
     },
     {
+      "id": 6,
       "name": "李四",
       "status": 2,
       "sex": 1,
       "type": 1,
       "date": 1592751467000,
-      "imgSrc": "/face.jpg"
+      "src": "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
     },
     {
+      "id": 7,
       "name": "张三",
       "status": 1,
       "sex": 0,
       "type": 2,
       "date": "2019-01-29T16:00:00.000+0000",
-      "imgSrc": "/face.jpg"
+      "src": "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
     },
     {
+      "id": 8,
       "name": "李四",
       "status": 2,
       "sex": 1,
       "type": 3,
       "date": "1592751467000",
-      "imgSrc": "/face.jpg"
-    },
-    {
-      "name": "",
-      "status": "",
-      "sex": "",
-      "type": "",
-      "date": "1592751467000",
-      "imgSrc": "/face.jpg"
+      "src": "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
     }
-  ]
+  ],
+  "total": 10
 }

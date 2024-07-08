@@ -1,30 +1,3 @@
-export function debounce<T extends (...args: any[]) => void>(
-  func: T,
-  delay = 500,
-  immediate?: boolean
-): T {
-  let timerId: any
-
-  return function (this: any, ...args: any[]) {
-    if (timerId) {
-      clearTimeout(timerId)
-    }
-    if (immediate) {
-      const callNow = !timerId
-      timerId = setTimeout(() => {
-        timerId = null
-      }, delay)
-      if (callNow) {
-        func.apply(this, args)
-      }
-    } else {
-      timerId = setTimeout(() => {
-        func.apply(this, args)
-      }, delay)
-    }
-  } as T
-}
-
 export const dateFormatting = (time: any, cFormat?: string) => {
   const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
   // 字符串数字形式的时间戳要转换下
@@ -42,7 +15,7 @@ export const dateFormatting = (time: any, cFormat?: string) => {
     s: date.getSeconds(),
     a: date.getDay()
   }
-  return format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
+  const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     if (key === 'a')
       return ['一', '二', '三', '四', '五', '六', '日'][value - 1]
@@ -51,8 +24,8 @@ export const dateFormatting = (time: any, cFormat?: string) => {
     }
     return value || 0
   })
+  return timeStr
 }
-
 // 动态远程加载script脚本
 export function loadScript(src: string) {
   return new Promise((resolve, reject) => {
@@ -75,25 +48,4 @@ export function parseToThousandth(number: number) {
 // 过滤前后空格
 export function replaceSpace(text: string) {
   return text.replace(/(^\s*)|(\s*$)/g, '') // 过滤掉前后空格
-}
-
-/**
- * 保存localStorage
- */
-export const setStorage = (key: string, content: any) => {
-  let stringContent = content
-  if (typeof content === 'object') {
-    stringContent = JSON.stringify(content)
-  }
-  window.localStorage.setItem(key, stringContent)
-}
-export const getStorage = (key: string, parse?: boolean) => {
-  const val: string = window.localStorage.getItem(key) || ''
-  if (parse) {
-    return JSON.parse(val)
-  }
-  return val
-}
-export const removeStorage = (key: string) => {
-  window.localStorage.removeItem(key)
 }

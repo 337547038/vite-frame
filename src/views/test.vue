@@ -1,135 +1,170 @@
-<!-- Created by 337547038 on 2022/4/29. -->
 <template>
-  <div>
-    <ak-form :data="data" ref="form" />
-    <el-button @click="click">setvalue</el-button>
+  <div class="common-main">
+    <table-list
+      ref="tableListEl"
+      pk="id"
+      :columns="columns"
+      :api="{ list: 'tableList', edit: 'tableList' }"
+      :before="beforeEvent"
+      :after="afterEvent"
+      :controlBtn="[
+        {
+          key: 'add'
+        },
+        { key: 'edit' },
+        { key: 'del' },
+        { label: '导入' }
+      ]"
+    >
+      <template #name="scope">
+        {{ scope.row.name }}
+      </template>
+      <template #btnAppend>
+        <el-button>测试</el-button>
+        <el-button>测试2</el-button>
+      </template>
+    </table-list>
   </div>
 </template>
-<script lang="ts" setup>
-  import { ref } from 'vue'
+<script setup lang="ts">
+  import { ref, onMounted, markRaw } from 'vue'
+  import TableList from '@/components/list/index.vue'
+  import InputTest from './inputTest.vue'
 
-  const data = ref([
+  const columns = ref<any>([
     {
-      type: 'upload',
-      name: 'upload',
-      formItem: {
-        // formItem参数
-        label: '图片上传'
-      },
-      control: {
-        // 当前控件参数
-        modelValue: [],
-        action: 'https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15',
-        listType: 'picture-card'
-      },
-      config: {}
+      type: 'selection'
     },
     {
-      type: 'input',
-      name: 'text',
-      formItem: {
-        // formItem参数
-        label: '用户名'
-      },
-      control: {
-        // 当前控件参数
-        modelValue: '12',
-        placeholder: '请输入',
-        onChange: (val: string) => {
-          console.log(val)
-        }
-      },
-      config: {
-        prepend: 'http', // 字符串时仅支持文字，同时可支持select下拉，见append设置
-        append: {
-          name: 'inputSelect', // 必须的，取值赋值使用
-          options: {
-            // 初始下拉项初始值，同时支持setOptions设置
-            '0': '年',
-            '1': '月',
-            '2': '日',
-            '3': '小时'
-          },
-          placeholder: 'placeholder',
-          defaultValue: '0', // 初始选中值
-          style: { width: '78px' }
-        }
+      label: '序号',
+      type: 'index',
+      width: 80
+    },
+    {
+      prop: 'diy',
+      label: '自定义筛选',
+      show: false,
+      search: {
+        type: 'component',
+        component: markRaw(InputTest)
       }
     },
     {
-      type: 'flex',
-      name: 'flex',
-      control: {},
-      flexData: [],
-      list: [
+      prop: 'name',
+      label: '昵称',
+      search: {
+        placeholder: '请输入'
+      }
+    },
+    {
+      prop: 'name2',
+      label: '列表不显示',
+      show: false
+    },
+    {
+      prop: 'sex',
+      label: '性别',
+      render: 'switch',
+      attr: {
+        inlinePrompt: true,
+        activeValue: 1,
+        inactiveValue: 0,
+        activeText: '男',
+        inactiveText: '女'
+      },
+      search: {
+        type: 'radio',
+        options: [{ value: 0, label: '男' }]
+      }
+    },
+    {
+      prop: 'src',
+      label: '图片地址',
+      render: 'image',
+      attr: {
+        width: '120px',
+        height: '90px'
+      },
+      search: false
+    },
+    {
+      prop: 'date',
+      label: 'Date',
+      width: 150,
+      help: '可快速将接口的各种形式的时间值格式化',
+      render: 'date',
+      search: {
+        type: 'datePicker'
+      }
+    },
+    {
+      prop: 'status',
+      label: '状态',
+      render: 'tag',
+      replaceValue: { '1': '启用', '0': '禁用' },
+      custom: { '1': 'success', '0': 'danger' },
+      search: {
+        type: 'select',
+        options: [{ value: '0', label: '禁用' }]
+      }
+    },
+    {
+      prop: 'type',
+      label: '类型'
+    },
+    {
+      label: '操作',
+      render: 'buttons',
+      buttons: [
         {
-          type: 'input',
-          name: 'flex1',
-          formItem: {
-            label: 'flex1',
-            rules: [
-              {
-                required: true,
-                message: '不能为空',
-                trigger: 'blur'
-              }
-            ]
+          key: 'edit',
+          click: (row) => {
+            console.log('click')
+          }
+          /*display: (row) => {
+            return row.status === 1
           },
-          control: {
-            modelValue: ''
-          },
-          config: {
-            append: {
-              name: 'inputSelect1', // 必须的，取值赋值使用
-              options: {
-                // 初始下拉项初始值，同时支持setOptions设置
-                '0': '年',
-                '1': '月',
-                '2': '日',
-                '3': '小时'
-              },
-              placeholder: 'placeholder',
-              defaultValue: '0', // 初始选中值
-              style: { width: '78px' }
-            }
+          disabled: (row) => {
+            return row.status === 1
+          }*/
+        },
+        {
+          label: '设置',
+          tooltip: '设置',
+          disabled: (row) => {
+            return row.status === 1
           }
         },
         {
-          type: 'input',
-          name: 'flex2',
-          formItem: {
-            label: 'flex2'
+          key: 'del',
+          tooltip: 'del',
+          popConfirm: { confirmButtonType: 'danger' },
+          display: (row) => {
+            return true
           },
-          control: {}
+          disabled: (row) => {
+            return row.status === 1
+          },
+          click: () => {
+            console.log('click')
+          }
         }
-      ],
-      config: {
-        add: '添加',
-        del: 'del'
-      }
+        /* { label: '其他' }*/
+      ]
     }
   ])
-  const form = ref()
-  const click = () => {
-    form.value.setValue({
-      text: 'ab',
-      flex: [
-        {
-          flex1: 'flex1',
-          flex2: 'flex2'
-        },
-        {
-          flex1: 'flex11',
-          flex2: 'flex22'
-        }
-      ],
-      inputSelect: '2'
-    })
-    form.value.setOptions({
-      inputSelect: {
-        '1': '小时',
-        '2': '分钟'
-      }
-    })
+
+  const beforeEvent = (type: string, params: any) => {
+    console.log('beforeEvent', type)
+    return params
   }
+  const afterEvent = (type: string, res: any) => {
+    console.log('afterEvent', type)
+  }
+
+  const tableListEl = ref()
+  onMounted(() => {
+    tableListEl.value.setFormValue({ name: '123', diy: 'diy' })
+  })
 </script>
+<style scoped lang="scss"></style>

@@ -4,25 +4,25 @@ import axios from 'axios'
 axios.defaults.headers.common['Authorization'] = getToken() */
 
 const service = axios.create({
-  //baseURL: import.meta.env.VITE_APP_URL, // api的base_url
+  baseURL: import.meta.env.VITE_APP_URL, // api的base_url
   timeout: 6000, // request timeout
   headers: {}
 })
 
 service.interceptors.request.use(
-  config => {
+  (config) => {
     return config
   },
-  error => {
+  (error) => {
     Promise.reject(error)
   }
 )
 
 service.interceptors.response.use(
-  response => {
-    return response.data
+  (response) => {
+    return response
   },
-  error => {
+  (error) => {
     return Promise.reject(error)
   }
 )

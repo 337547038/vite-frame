@@ -38,8 +38,6 @@ el-table二次封装，实现功能：
 >✔5.实现radio等类选项数据动态获取/字典匹配；<br />
 >✔6.实现动态联动请求；<br />
 >✔7.实现div布局；<br />
->✔8.实现弹性布局；<br />
->✔9.实现input插槽；<br />
  
  使用：
 ```vue
@@ -52,20 +50,13 @@ el-table二次封装，实现功能：
 
 本系统使用`vite-plugin-pages`插件自动生成路由
 
-若需使用`tagViews`功能，则需在页面中导出组件名称（`keep-alive`需要使用组件名称），可使用添加`script`方法导出或使用相关插件(`vite-plugin-vue-setup-extend、unplugin-vue-define-options`)，同时需将当前路由`name`设置为组件名称，保持一致
+若需使用`tagViews`功能，则需在页面中导出组件名称（`keep-alive`需要使用组件名称），可使用添加`script`方法导出或使用相关插件，同时需将当前路由`name`设置为组件名称，保持一致
 
-方法一：添加script标签
 ```javascript
 <script lang="tsx">
   export default {
-  name: 'XXXXX' // 注意路由name是不能重复的
+  name: 'XXXXX'
 }
-</script>
-```
-方法二：使用自编写插件`./src/utils/vitePlugins` 直接在`script`标签添加`name`值
-```javascript
-<script setup lang="ts" name="name">
-  
 </script>
 ```
 

@@ -42,11 +42,6 @@
       icon: 'location'
     },
     {
-      title: '表单页面2',
-      path: '/form2',
-      icon: 'location'
-    },
-    {
       title: '列表页面',
       path: '/list',
       icon: 'collection'
