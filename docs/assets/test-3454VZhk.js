@@ -1,1 +1,0 @@
-import{d as a,b as e,o as p,g as r,e as o,w as c}from"./index-BqfPSI0J.js";const d=a({__name:"test",props:{placeholder:{}},setup(s){return(t,_)=>{const l=e("el-input"),n=e("el-form-item");return p(),r("div",null,[o(n,{label:"自定义组件"},{default:c(()=>[o(l,{placeholder:t.placeholder},null,8,["placeholder"])]),_:1})])}}});export{d as default};

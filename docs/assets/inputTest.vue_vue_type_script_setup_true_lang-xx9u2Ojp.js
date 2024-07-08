@@ -1,0 +1,1 @@
+import{d as a,z as s,b as u,o as m,c as d}from"./index-DdK8bCNS.js";const i=a({__name:"inputTest",props:{modelValue:{},modelModifiers:{}},emits:["update:modelValue"],setup(l){const e=s(l,"modelValue");return(p,o)=>{const n=u("el-input");return m(),d(n,{modelValue:e.value,"onUpdate:modelValue":o[0]||(o[0]=t=>e.value=t)},null,8,["modelValue"])}}});export{i as _};
